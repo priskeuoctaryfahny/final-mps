@@ -74,7 +74,7 @@
                                             class="position-relative bg-body-quaternary rounded-circle cursor-pointer d-flex flex-center mb-xxl-7">
                                             <div class="avatar avatar-5xl">
                                                 <img class="rounded-circle text-center"
-                                                    src="{{ $user->picture ? Storage::url($user->picture) : asset('assets/assets/img/team/1.webp') }}"
+                                                    src="{{ $user->picture ? Storage::url($user->picture) : asset('backend/assets/img/team/1.webp') }}"
                                                     alt="Profile Picture" />
                                             </div>
                                             <label class="w-100 h-100 position-absolute z-1" for="picture"></label>
@@ -83,7 +83,7 @@
                                 @else
                                     <div class="avatar avatar-5xl">
                                         <img class="rounded-circle text-center"
-                                            src="{{ $user->picture ? Storage::url($user->picture) : asset('assets/assets/img/team/1.webp') }}"
+                                            src="{{ $user->picture ? Storage::url($user->picture) : asset('backend/assets/img/team/1.webp') }}"
                                             alt="Profile Picture" />
                                     </div>
                                 @endif

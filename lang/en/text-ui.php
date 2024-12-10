@@ -14,30 +14,30 @@ return [
     */
 
     'breadcrumb' => [
-        'dashboard' => 'Dasbor',
-        'user' => 'Akun Pamaké',
-        'role' => 'Aksés Pamaké',
-        'profile' => 'Profil',
+        'dashboard' => 'Dashboard',
+        'user' => 'User Account',
+        'role' => 'Role Access',
+        'profile' => 'Profile',
     ],
 
     'sidebar' => [
-        'dashboard' => 'Dasbor',
-        'user' => 'Akun Pamaké',
-        'role' => 'Aksés Pamaké',
+        'dashboard' => 'Dashboard',
+        'user' => 'User Account',
+        'role' => 'Role Access',
     ],
 
     'navbar' => [
-        'dashboard' => 'Dasbor',
-        'profile' => 'Profil',
-        'logout' => 'Kaluar',
+        'dashboard' => 'Dashboard',
+        'profile' => 'Profile',
+        'logout' => 'Logout',
     ],
 
     'lang' => [
-        'text' => 'Basa',
-        'language' => 'Sunda',
-        'english' => 'Inggris',
-        'indonesia' => 'Indonésia',
-        'javanese' => 'Sunda',
-    ]
+        'text' => 'Language',
+        'language' => 'English',
+        'english' => 'English',
+        'indonesia' => 'Indonesia',
+    ],
 
+    'copyright' => 'Copyright. All rights reserved.',
 ];

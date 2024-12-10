@@ -10,7 +10,7 @@
     <!-- ===============================================-->
     <!--    Document Title-->
     <!-- ===============================================-->
-    <title>{{ config('app.name', 'Sistem Informasi') }} - {{ $slot }}</title>
+    <title>{{ $sets->web_title ? $sets->web_title : config('app.name') }} - {{ $slot }}</title>
 
 
     <!-- ===============================================-->

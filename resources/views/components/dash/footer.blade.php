@@ -1,8 +1,8 @@
+{{ $footer }}
+
 </div>
 </main>
-<!-- ===============================================-->
-<!--    End of Main Content-->
-<!-- ===============================================-->
+
 
 
 <div class="offcanvas offcanvas-end settings-panel border-0" id="settings-offcanvas" tabindex="-1"

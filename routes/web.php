@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LanguageController;
@@ -25,7 +26,7 @@ Route::get('lang', [LanguageController::class, 'change'])->name("change.lang");
 
 
 
-Auth::routes();
+Auth::routes(['verify' => true]);
 
 Route::controller(GoogleController::class)->group(function () {
     Route::get('auth/google', 'redirectToGoogle')->name('auth.google');

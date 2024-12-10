@@ -16,7 +16,8 @@
             <div class="col-12 col-lg-6">
                 <label class="form-label text-body-highlight fs-8 ps-0 text-capitalize lh-sm" for="web_logo">Logo
                     Web/Aplikasi</label>
-                <input class="form-control" id="web_logo" type="file" value="{{ $setting->web_logo }}" name="web_logo"/>
+                <input class="form-control" id="web_logo" type="file" value="{{ $setting->web_logo }}"
+                    name="web_logo" accept="image/*" />
                 <div class="text-center">
                     <img src="{{ $setting->web_logo ? Storage::url($setting->web_logo) : asset('backend/assets/img/default/nope.jpg') }}"
                         class="img-fluid p-2" style="width: 200px">
