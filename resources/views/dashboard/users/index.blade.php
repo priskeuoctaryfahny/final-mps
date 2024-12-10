@@ -25,39 +25,40 @@
                 </div>
 
 
-
-                <div class="col-auto">
-                    <div class="btn-group">
-                        <div class="dropdown">
-                            <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="exportDropdown"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fa-solid fa-file-export me-2"></i>Export
-                            </button>
-                            <ul class="dropdown-menu" aria-labelledby="exportDropdown">
-                                <li>
-                                    <form action="{{ route('users.export', 'pdf') }}" method="get" id="exportPdfForm">
-                                        <button class="dropdown-item" type="submit">
-                                            Export PDF
+                @can('user-download')
+                    <div class="col-auto">
+                        <div class="btn-group">
+                            <div class="dropdown">
+                                <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="exportDropdown"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fa-solid fa-file-export me-2"></i>Export
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="exportDropdown">
+                                    <li>
+                                        <form action="{{ route('users.export', 'pdf') }}" method="get" id="exportPdfForm">
+                                            <button class="dropdown-item" type="submit">
+                                                Export PDF
+                                            </button>
+                                        </form>
+                                    </li>
+                                    <li>
+                                        <form action="{{ route('users.export', 'excel') }}" method="get"
+                                            id="exportExcelForm">
+                                            <button class="dropdown-item" type="submit">
+                                                Export Excel
+                                            </button>
+                                        </form>
+                                    </li>
+                                    <li>
+                                        <button class="dropdown-item" onclick="window.print()">
+                                            Export Diagram
                                         </button>
-                                    </form>
-                                </li>
-                                <li>
-                                    <form action="{{ route('users.export', 'excel') }}" method="get"
-                                        id="exportExcelForm">
-                                        <button class="dropdown-item" type="submit">
-                                            Export Excel
-                                        </button>
-                                    </form>
-                                </li>
-                                <li>
-                                    <button class="dropdown-item" onclick="window.print()">
-                                        Export Diagram
-                                    </button>
-                                </li>
-                            </ul>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
-                </div>
+                @endcan
 
             </div>
 

@@ -6,11 +6,7 @@ use Diglactic\Breadcrumbs\Generator as BreadcrumbTrail;
 
 // Dashboard
 Breadcrumbs::for('dashboard', function (BreadcrumbTrail $trail) {
-    $trail->push('Dashboard', route('dashboard'));
-});
-
-Breadcrumbs::for('dashboard2', function (BreadcrumbTrail $trail) {
-    $trail->push('Dashboard 2', route('dashboard2'));
+    $trail->push(trans('text-ui.breadcrumb.dashboard'), route('dashboard'));
 });
 
 // Dashboard > Profile
@@ -58,7 +54,7 @@ Breadcrumbs::for('edit profile', function (BreadcrumbTrail $trail) {
 // Dashboard > User
 Breadcrumbs::for('users', function (BreadcrumbTrail $trail) {
     $trail->parent('dashboard');
-    $trail->push('Pengguna', route('users.index'));
+    $trail->push(trans('text-ui.breadcrumb.user'), route('users.index'));
 });
 
 // Dashboard > User > Edit
@@ -82,7 +78,7 @@ Breadcrumbs::for('show user', function (BreadcrumbTrail $trail) {
 // Dashboard > Role
 Breadcrumbs::for('roles', function (BreadcrumbTrail $trail) {
     $trail->parent('dashboard');
-    $trail->push('Role', route('roles.index'));
+    $trail->push(trans('text-ui.breadcrumb.role'), route('roles.index'));
 });
 
 // Dashboard > Role > Edit

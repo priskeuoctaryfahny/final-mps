@@ -1,8 +1,9 @@
 <?php
 
-use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\LanguageController;
+use App\Http\Controllers\WebSettingController;
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\Dashboard\Management\RoleController;
 use App\Http\Controllers\Dashboard\Management\UserController;
@@ -14,11 +15,13 @@ Route::get('/', function () {
 
 Route::get('/', function () {
     if (Auth::check()) {
-        return redirect()->route('home');
+        return redirect()->route('dashboard');
     } else {
         return redirect()->route('login');
     }
 });
+
+Route::get('lang', [LanguageController::class, 'change'])->name("change.lang");
 
 
 
@@ -39,6 +42,7 @@ Route::get('/dashboard2', function () {
 
 Route::middleware('auth')->group(function () {
     Route::resource('profiles', ProfileController::class);
+    Route::resource('settings', WebSettingController::class);
 });
 
 Route::middleware('auth')->group(function () {

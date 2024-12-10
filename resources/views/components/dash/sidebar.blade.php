@@ -15,39 +15,27 @@
                                     <span data-feather="compass"></span>
                                 </span>
                                 <span class="nav-link-text-wrapper">
-                                    <span class="nav-link-text">Dashboard</span>
+                                    <span class="nav-link-text">{{ __('text-ui.sidebar.dashboard') }}</span>
                                 </span>
                             </div>
                         </a>
                     </div>
 
-                    <div class="nav-item-wrapper">
-                        <a class="nav-link {{ request()->routeIs('dashboard2') ? 'active' : '' }} label-1"
-                            href="{{ route('dashboard2') }}" role="button" data-bs-toggle="" aria-expanded="false">
-                            <div class="d-flex align-items-center">
-                                <span class="nav-link-icon">
-                                    <span data-feather="compass"></span>
-                                </span>
-                                <span class="nav-link-text-wrapper">
-                                    <span class="nav-link-text">Dashboard 2</span>
-                                </span>
-                            </div>
-                        </a>
-                    </div>
-
-                    <div class="nav-item-wrapper">
-                        <a class="nav-link {{ request()->routeIs('roles.*') ? 'active' : '' }} label-1"
-                            href="{{ route('roles.index') }}" role="button" data-bs-toggle="" aria-expanded="false">
-                            <div class="d-flex align-items-center">
-                                <span class="nav-link-icon">
-                                    <span data-feather="compass"></span>
-                                </span>
-                                <span class="nav-link-text-wrapper">
-                                    <span class="nav-link-text">Aktor Sistem</span>
-                                </span>
-                            </div>
-                        </a>
-                    </div>
+                    @canany(['role-list', 'role-create', 'role-edit', 'role-delete'])
+                        <div class="nav-item-wrapper">
+                            <a class="nav-link {{ request()->routeIs('roles.*') ? 'active' : '' }} label-1"
+                                href="{{ route('roles.index') }}" role="button" data-bs-toggle="" aria-expanded="false">
+                                <div class="d-flex align-items-center">
+                                    <span class="nav-link-icon">
+                                        <span data-feather="compass"></span>
+                                    </span>
+                                    <span class="nav-link-text-wrapper">
+                                        <span class="nav-link-text">{{ __('text-ui.sidebar.role') }}</span>
+                                    </span>
+                                </div>
+                            </a>
+                        </div>
+                    @endcanany
 
                     <div class="nav-item-wrapper">
                         <a class="nav-link {{ request()->routeIs('users.*') ? 'active' : '' }} label-1"
@@ -57,7 +45,7 @@
                                     <span data-feather="compass"></span>
                                 </span>
                                 <span class="nav-link-text-wrapper">
-                                    <span class="nav-link-text">Pengguna</span>
+                                    <span class="nav-link-text">{{ __('text-ui.sidebar.user') }}</span>
                                 </span>
                             </div>
                         </a>

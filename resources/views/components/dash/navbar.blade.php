@@ -6,12 +6,13 @@
                 data-bs-toggle="collapse" data-bs-target="#navbarVerticalCollapse" aria-controls="navbarVerticalCollapse"
                 aria-expanded="false" aria-label="Toggle Navigation"><span class="navbar-toggle-icon"><span
                         class="toggle-line"></span></span></button>
-            <a class="navbar-brand me-1 me-sm-3" href="{{ asset('backend') }}/index.html">
+            <a class="navbar-brand me-1 me-sm-3" href="#">
                 <div class="d-flex align-items-center">
-                    <div class="d-flex align-items-center"><img src="{{ asset('backend') }}/assets/img/icons/logo.png"
+                    <div class="d-flex align-items-center">
+                        <img src="{{ $sets->web_logo ? Storage::url($sets->web_logo) : asset('backend/assets/img/default/nope.jpg') }}"
                             alt="phoenix" width="27" />
                         <h5 class="logo-text ms-2 d-none d-sm-block">
-                            {{ config('app.name') }}
+                            {{ $sets->web_title ? $sets->web_title : config('app.name') }}
                         </h5>
                     </div>
                 </div>
@@ -207,6 +208,26 @@
             </div>
         </div>
         <ul class="navbar-nav navbar-nav-icons flex-row">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" id="languageDropdown" role="button" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    {{ trans('text-ui.lang.text') }}: {{ __('text-ui.lang.language') }}
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="languageDropdown">
+                    <li>
+                        <a class="dropdown-item"
+                            href="{{ route('change.lang', ['lang' => 'en']) }}">{{ __('text-ui.lang.english') }}</a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item"
+                            href="{{ route('change.lang', ['lang' => 'id']) }}">{{ __('text-ui.lang.indonesia') }}</a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item"
+                            href="{{ route('change.lang', ['lang' => 'jv']) }}">{{ __('text-ui.lang.javanese') }}</a>
+                    </li>
+                </ul>
+            </li>
             <li class="nav-item">
                 <div class="theme-control-toggle fa-icon-wait px-2">
                     <input class="form-check-input ms-0 theme-control-toggle-input" type="checkbox"
@@ -253,21 +274,30 @@
                                         class="nav-link {{ request()->routeIs('profiles.*') ? 'text-primary' : '' }} px-3 d-block"
                                         href="{{ route('profiles.index') }}"> <span
                                             class="me-2 text-body align-bottom"
-                                            data-feather="user"></span><span>Profile</span></a></li>
+                                            data-feather="user"></span><span>{{ __('text-ui.navbar.profile') }}</span></a>
+                                </li>
                                 <li class="nav-item"><a
                                         class="nav-link {{ request()->routeIs('dashboard') ? 'text-primary' : '' }} px-3 d-block"
                                         href="{{ route('dashboard') }}"><span class="me-2 text-body align-bottom"
-                                            data-feather="pie-chart"></span>Dashboard</a></li>
+                                            data-feather="pie-chart"></span>{{ __('text-ui.navbar.dashboard') }}</a>
+                                </li>
+                                <li class="nav-item"><a
+                                        class="nav-link {{ request()->routeIs('settings.index') ? 'text-primary' : '' }} px-3 d-block"
+                                        href="{{ route('settings.index') }}"><span
+                                            class="me-2 text-body align-bottom"
+                                            data-feather="settings"></span>{{ __('text-ui.navbar.web-setting') }}</a>
+                                </li>
 
 
                             </ul>
                         </div>
-                        <div class="card-footer p-0 border-top border-translucent">
-                            <div class="px-3">
+                        <div class="card-footer p-0">
+                            <div class="px-3 mt-2">
                                 <form action="{{ route('logout') }}" method="post">
                                     @csrf
                                     <button class="btn btn-phoenix-secondary d-flex flex-center w-100" href="#!">
-                                        <span class="me-2" data-feather="log-out"> </span>Sign out</button>
+                                        <span class="me-2" data-feather="log-out">
+                                        </span>{{ __('text-ui.navbar.logout') }}</button>
                                 </form>
                             </div>
                             <div class="my-2 text-center fw-bold fs-10 text-body-quaternary"><a
@@ -278,6 +308,7 @@
                     </div>
                 </div>
             </li>
+
         </ul>
     </div>
 </nav>
