@@ -1,18 +1,18 @@
 <?php
 
-use Spatie\Permission\Models\Role;
+use Illuminate\Support\Str;
 use Diglactic\Breadcrumbs\Breadcrumbs;
 use Diglactic\Breadcrumbs\Generator as BreadcrumbTrail;
 
 // Dashboard
-Breadcrumbs::for('dashboard', function (BreadcrumbTrail $trail) {
-    $trail->push(trans('text-ui.breadcrumb.dashboard'), route('dashboard'));
+Breadcrumbs::for(Str::lower(__('text-ui.breadcrumb.dashboard')), function (BreadcrumbTrail $trail) {
+    $trail->push(__('text-ui.breadcrumb.dashboard'), route('dashboard'));
 });
 
 // Dashboard > Profile
-Breadcrumbs::for('profile', function (BreadcrumbTrail $trail) {
-    $trail->parent('dashboard');
-    $trail->push('Profil', route('profiles.index'));
+Breadcrumbs::for(Str::lower(__('text-ui.breadcrumb.profile')), function (BreadcrumbTrail $trail) {
+    $trail->parent(Str::lower(__('text-ui.breadcrumb.dashboard')));
+    $trail->push(__('text-ui.breadcrumb.profile'), route('profiles.index'));
 });
 
 Breadcrumbs::for('surat masuk', function (BreadcrumbTrail $trail) {
@@ -52,49 +52,42 @@ Breadcrumbs::for('edit profile', function (BreadcrumbTrail $trail) {
 });
 
 // Dashboard > User
-Breadcrumbs::for('users', function (BreadcrumbTrail $trail) {
-    $trail->parent('dashboard');
-    $trail->push(trans('text-ui.breadcrumb.user'), route('users.index'));
+Breadcrumbs::for(Str::lower(__('text-ui.controller.user.index.title')), function (BreadcrumbTrail $trail) {
+    $trail->parent(Str::lower(__('text-ui.breadcrumb.dashboard')));
+    $trail->push(__('text-ui.breadcrumb.user.index'), route('users.index'));
 });
 
 // Dashboard > User > Edit
-Breadcrumbs::for('edit user', function (BreadcrumbTrail $trail) {
-    $trail->parent('users');
-    $trail->push('Edit');
+Breadcrumbs::for(Str::lower(__('text-ui.controller.user.edit.title')), function (BreadcrumbTrail $trail) {
+    $trail->parent(Str::lower(__('text-ui.controller.user.index.title')));
+    $trail->push(__('text-ui.breadcrumb.user.edit'));
 });
 
 // Dashboard > User > Add
-Breadcrumbs::for('create user', function (BreadcrumbTrail $trail) {
-    $trail->parent('users');
-    $trail->push('Tambah', route('users.create'));
-});
-
-// Dashboard > User > Show
-Breadcrumbs::for('show user', function (BreadcrumbTrail $trail) {
-    $trail->parent('users');
-    $trail->push('Show');
+Breadcrumbs::for(Str::lower(__('text-ui.controller.user.create.title')), function (BreadcrumbTrail $trail) {
+    $trail->parent(Str::lower(__('text-ui.controller.user.index.title')));
+    $trail->push(__('text-ui.breadcrumb.user.create'), route('users.create'));
 });
 
 // Dashboard > Role
-Breadcrumbs::for('roles', function (BreadcrumbTrail $trail) {
-    $trail->parent('dashboard');
-    $trail->push(trans('text-ui.breadcrumb.role'), route('roles.index'));
+Breadcrumbs::for(Str::lower(__('text-ui.controller.role.index.title')), function (BreadcrumbTrail $trail) {
+    $trail->parent(Str::lower(__('text-ui.breadcrumb.dashboard')));
+    $trail->push(__('text-ui.breadcrumb.role.index'), route('roles.index'));
 });
 
 // Dashboard > Role > Edit
-Breadcrumbs::for('edit role', function (BreadcrumbTrail $trail) {
-    $trail->parent('roles');
-    $trail->push('Edit');
+Breadcrumbs::for(Str::lower(__('text-ui.controller.role.edit.title')), function (BreadcrumbTrail $trail) {
+    $trail->parent(Str::lower(__('text-ui.controller.role.index.title')));
+    $trail->push(__('text-ui.breadcrumb.role.edit'));
 });
 
 // Dashboard > Role > Tambah
-Breadcrumbs::for('create role', function (BreadcrumbTrail $trail) {
-    $trail->parent('roles');
-    $trail->push('Tambah', route('roles.create'));
+Breadcrumbs::for(Str::lower(__('text-ui.controller.role.create.title')), function (BreadcrumbTrail $trail) {
+    $trail->parent(Str::lower(__('text-ui.controller.role.index.title')));
+    $trail->push(__('text-ui.breadcrumb.role.create'), route('roles.create'));
 });
 
-// Dashboard > Role > Show
-Breadcrumbs::for('show role', function (BreadcrumbTrail $trail) {
-    $trail->parent('roles');
-    $trail->push('Show');
+Breadcrumbs::for(Str::lower(__('text-ui.controller.web-setting.index.title')), function (BreadcrumbTrail $trail) {
+    $trail->parent(Str::lower(__('text-ui.breadcrumb.dashboard')));
+    $trail->push(__('text-ui.controller.web-setting.index.title'));
 });

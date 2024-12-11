@@ -6,12 +6,11 @@ use App\Models\User;
 use Illuminate\View\View;
 use Illuminate\Support\Arr;
 use App\Exports\UsersExport;
+use App\Traits\LogsActivity;
 use Illuminate\Http\Request;
-use Barryvdh\DomPDF\Facade\Pdf;
-use Illuminate\Support\Facades\DB;
+use App\Charts\UsersRoleChart;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
-use App\Traits\LogsActivity;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
@@ -35,15 +34,13 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request): View
+    public function index(UsersRoleChart $chart): View
     {
-        $title = 'Users';
+        $title = __('text-ui.controller.user.index.title');
         $users = User::orderBy('id', 'DESC')->get();
-        $roles = Role::pluck('name', 'name')->all();
-        $totalUser = User::count();
+        $chart = $chart->build();
 
-
-        return view('dashboard.users.index', compact('users', 'title', 'roles', 'totalUser'));
+        return view('dashboard.users.index', compact('users', 'title', 'chart'));
     }
 
     /**
@@ -54,7 +51,7 @@ class UserController extends Controller
     public function create(): View
     {
         $roles = Role::pluck('name', 'name')->all();
-        $title = 'Create User';
+        $title = __('text-ui.controller.user.create.title');
 
         return view('dashboard.users.create', compact('roles', 'title'));
     }
@@ -87,17 +84,6 @@ class UserController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show(User $user): View
-    {
-        return view('dashboard.users.show', compact('user'));
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
@@ -105,7 +91,7 @@ class UserController extends Controller
      */
     public function edit(User $user): View
     {
-        $title = 'Edit User';
+        $title = __('text-ui.controller.user.edit.title');
         $roles = Role::pluck('name', 'name')->all();
         $userRole = $user->roles->pluck('name', 'name')->all();
 

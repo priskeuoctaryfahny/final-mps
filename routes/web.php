@@ -10,16 +10,7 @@ use App\Http\Controllers\Dashboard\Management\RoleController;
 use App\Http\Controllers\Dashboard\Management\UserController;
 
 Route::get('/', function () {
-    return view('welcome');
-});
-
-
-Route::get('/', function () {
-    if (Auth::check()) {
-        return redirect()->route('dashboard');
-    } else {
-        return redirect()->route('login');
-    }
+    return Auth::check() ? redirect()->route('dashboard') : redirect()->route('login');
 });
 
 Route::get('lang', [LanguageController::class, 'change'])->name("change.lang");
@@ -34,7 +25,7 @@ Route::controller(GoogleController::class)->group(function () {
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard.index')->with('title', 'Dashboard');
+    return view('dashboard.index')->with('title', __('text-ui.breadcrumb.dashboard'));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/dashboard2', function () {

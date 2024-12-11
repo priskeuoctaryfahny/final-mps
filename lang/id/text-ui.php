@@ -4,9 +4,18 @@ return [
 
     'breadcrumb' => [
         'dashboard' => 'Dasbor',
-        'user' => 'Akun Pengguna',
-        'role' => 'Akses Pengguna',
+        'user' => [
+            'index' => 'Akun Pengguna',
+            'create' => 'Tambah Pengguna',
+            'edit' => 'Edit Pengguna',
+        ],
+        'role' => [
+            'index' => 'Akses Pengguna',
+            'create' => 'Tambah Akses Pengguna',
+            'edit' => 'Edit Akses Pengguna',
+        ],
         'profile' => 'Profil',
+        'web-setting' => 'Pengaturan Web',
     ],
 
     'sidebar' => [
@@ -19,6 +28,7 @@ return [
         'dashboard' => 'Dasbor',
         'profile' => 'Profil',
         'logout' => 'Keluar',
+        'web-setting' => 'Pengaturan Web',
     ],
 
     'lang' => [
@@ -26,6 +36,41 @@ return [
         'language' => 'Indonesia',
         'english' => 'Inggris',
         'indonesia' => 'Indonesia',
+    ],
+
+    'controller' => [
+        'web-setting' => [
+            'index' => [
+                'title' => 'Pengaturan Web',
+            ]
+        ],
+        'user' => [
+            'index' => [
+                'title' => 'Akun Pengguna',
+            ],
+            'create' => [
+                'title' => 'Tambah Akun Pengguna',
+            ],
+            'edit' => [
+                'title' => 'Edit Akun Pengguna',
+            ],
+        ],
+        'role' => [
+            'index' => [
+                'title' => 'Akses Pengguna',
+            ],
+            'create' => [
+                'title' => 'Tambah Akses Pengguna',
+            ],
+            'edit' => [
+                'title' => 'Edit Akses Pengguna',
+            ],
+        ],
+        'profile' => [
+            'index' => [
+                'title' => 'Profil'
+            ]
+        ]
     ],
 
     'copyright' => 'Copyright. Hak Cipta Dilindungi',

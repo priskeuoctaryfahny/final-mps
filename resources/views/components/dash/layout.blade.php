@@ -5,7 +5,7 @@
 <x-dash.sidebar />
 
 <x-dash.navbar>
-    {{ str_replace(' ', '', Str::lower($title)) }}
+    {{ Str::lower($title) }}
 </x-dash.navbar>
 
 {{ $slot }}
@@ -23,7 +23,7 @@
                     </p>
                 </div>
                 <div class="col-12 col-sm-auto text-center">
-                    <p class="mb-0 text-body-tertiary text-opacity-85">v1.0.0</p>
+                    <p class="mb-0 text-body-tertiary text-opacity-85">v1.0.0 Beta</p>
                 </div>
             </div>
         </footer>

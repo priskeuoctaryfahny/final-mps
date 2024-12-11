@@ -2,42 +2,77 @@
 
 return [
 
-    /*
-    |--------------------------------------------------------------------------
-    | Authentication Language Lines
-    |--------------------------------------------------------------------------
-    |
-    | The following language lines are used during authentication for various
-    | messages that we need to display to the user. You are free to modify
-    | these language lines according to your application's requirements.
-    |
-    */
-
     'breadcrumb' => [
         'dashboard' => 'Dashboard',
-        'user' => 'User Account',
-        'role' => 'Role Access',
+        'user' => [
+            'index' => 'User Accounts',
+            'create' => 'Add User',
+            'edit' => 'Edit User',
+        ],
+        'role' => [
+            'index' => 'User Access',
+            'create' => 'Add User Access',
+            'edit' => 'Edit User Access',
+        ],
         'profile' => 'Profile',
+        'web-setting' => 'Web Settings',
     ],
 
     'sidebar' => [
         'dashboard' => 'Dashboard',
-        'user' => 'User Account',
-        'role' => 'Role Access',
+        'user' => 'User Accounts',
+        'role' => 'User Access',
     ],
 
     'navbar' => [
         'dashboard' => 'Dashboard',
         'profile' => 'Profile',
         'logout' => 'Logout',
+        'web-setting' => 'Web Settings',
     ],
 
     'lang' => [
         'text' => 'Language',
         'language' => 'English',
         'english' => 'English',
-        'indonesia' => 'Indonesia',
+        'indonesia' => 'Indonesian',
     ],
 
-    'copyright' => 'Copyright. All rights reserved.',
+    'controller' => [
+        'web-setting' => [
+            'index' => [
+                'title' => 'Web Settings',
+            ]
+        ],
+        'user' => [
+            'index' => [
+                'title' => 'User Accounts',
+            ],
+            'create' => [
+                'title' => 'Add User Account',
+            ],
+            'edit' => [
+                'title' => 'Edit User Account',
+            ],
+        ],
+        'role' => [
+            'index' => [
+                'title' => 'User Access',
+            ],
+            'create' => [
+                'title' => 'Add User Access',
+            ],
+            'edit' => [
+                'title' => 'Edit User Access',
+            ],
+        ],
+        'profile' => [
+            'index' => [
+                'title' => 'Profile'
+            ]
+        ]
+    ],
+
+    'copyright' => 'Copyright. All Rights Reserved',
+
 ];

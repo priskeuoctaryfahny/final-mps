@@ -21,7 +21,7 @@ class WebSettingController extends Controller
     {
         return view('dashboard.setting.index', [
             'user' => $request->user(),
-            'title' => __('text-ui.controller.web-setting-index.title'),
+            'title' => __('text-ui.controller.web-setting.index.title'),
             'setting' => WebSetting::first(),
             'roles' => Role::all(),
         ]);
@@ -67,8 +67,4 @@ class WebSettingController extends Controller
         $setting->update($validatedData);
         return Redirect::route('settings.index')->with('success', __('text-ui.controller.web-setting-update.success'));
     }
-
-    /**
-     * Delete the user's account.
-     */
 }

@@ -235,7 +235,6 @@
 <script src="{{ asset('backend') }}/assets/js/phoenix.js"></script>
 
 @stack('footer')
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 @stack('chart')
 <script>
     toastr.options = {

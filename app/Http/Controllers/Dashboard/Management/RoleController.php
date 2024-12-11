@@ -35,8 +35,9 @@ class RoleController extends Controller
      */
     public function index(Request $request): View
     {
+        $title = __('text-ui.controller.role.index.title');
         $roles = Role::orderBy('id', 'DESC')->get();
-        return view('dashboard.roles.index', ['roles' => $roles, 'title' => 'Roles']);
+        return view('dashboard.roles.index', compact('title', 'roles'));
     }
 
     /**
@@ -46,7 +47,7 @@ class RoleController extends Controller
      */
     public function create(): View
     {
-        $title = 'Create Role';
+        $title = __('text-ui.controller.role.create.title');
         $permission = Permission::get();
         return view('dashboard.roles.create', compact('permission', 'title'));
     }
@@ -78,23 +79,6 @@ class RoleController extends Controller
             ->with('success', 'Role created successfully');
     }
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id): View
-    {
-        $title = 'Show Role';
-        $role = Role::find($id);
-        $rolePermissions = Permission::join("role_has_permissions", "role_has_permissions.permission_id", "=", "permissions.id")
-            ->where("role_has_permissions.role_id", $id)
-            ->get();
-
-        return view('dashboard.roles.show', compact('role', 'rolePermissions', 'title'));
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
@@ -102,7 +86,7 @@ class RoleController extends Controller
      */
     public function edit($id): View
     {
-        $title = 'Edit Role';
+        $title = __('text-ui.controller.role.edit.title');
         $role = Role::find($id);
         $permission = Permission::get();
 
