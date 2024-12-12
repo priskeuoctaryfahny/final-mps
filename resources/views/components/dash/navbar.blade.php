@@ -27,12 +27,18 @@
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="languageDropdown">
                     <li>
-                        <a class="dropdown-item" href="{{ route('change.lang', ['lang' => 'en']) }}"><span
-                                class="{{ config('app.locale') == 'en' ? 'text-primary' : '' }}">{{ __('text-ui.lang.english') }}</span></a>
+                        <a class="dropdown-item" href="{{ route('change.lang', ['lang' => 'en']) }}">
+                            <img src="{{ asset('backend/assets/img/lang/usa.png') }}" style="width:15px"
+                                class="img-fluid mb-1">
+                            <span class="{{ config('app.locale') == 'en' ? 'text-primary' : '' }}">
+                                {{ __('text-ui.lang.english') }}</span></a>
                     </li>
                     <li>
-                        <a class="dropdown-item" href="{{ route('change.lang', ['lang' => 'id']) }}"><span
-                                class="{{ config('app.locale') == 'id' ? 'text-primary' : '' }}">{{ __('text-ui.lang.indonesia') }}</span></a>
+                        <a class="dropdown-item" href="{{ route('change.lang', ['lang' => 'id']) }}"><img
+                                src="{{ asset('backend/assets/img/lang/idn.png') }}" style="width:15px"
+                                class="img-fluid mb-1"><span
+                                class="{{ config('app.locale') == 'id' ? 'text-primary' : '' }}">
+                                {{ __('text-ui.lang.indonesia') }}</span></a>
                     </li>
                 </ul>
             </li>
@@ -80,7 +86,8 @@
                             <ul class="nav d-flex flex-column mb-2 pb-1">
                                 <li class="nav-item"><a
                                         class="nav-link {{ request()->routeIs('profiles.*') ? 'text-primary' : '' }} px-3 d-block"
-                                        href="{{ route('profiles.index') }}"> <span class="me-2 text-body align-bottom"
+                                        href="{{ route('profiles.index') }}"> <span
+                                            class="me-2 text-body align-bottom"
                                             data-feather="user"></span><span>{{ __('text-ui.navbar.profile') }}</span></a>
                                 </li>
                                 <li class="nav-item"><a

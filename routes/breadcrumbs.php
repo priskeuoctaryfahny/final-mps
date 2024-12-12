@@ -9,11 +9,7 @@ Breadcrumbs::for(Str::lower(__('text-ui.breadcrumb.dashboard')), function (Bread
     $trail->push(__('text-ui.breadcrumb.dashboard'), route('dashboard'));
 });
 
-// Dashboard > Profile
-Breadcrumbs::for(Str::lower(__('text-ui.breadcrumb.profile')), function (BreadcrumbTrail $trail) {
-    $trail->parent(Str::lower(__('text-ui.breadcrumb.dashboard')));
-    $trail->push(__('text-ui.breadcrumb.profile'), route('profiles.index'));
-});
+
 
 Breadcrumbs::for('surat masuk', function (BreadcrumbTrail $trail) {
     $trail->parent('dashboard');
@@ -45,10 +41,16 @@ Breadcrumbs::for('edit surat keluar', function (BreadcrumbTrail $trail) {
     $trail->push('Edit');
 });
 
+// Dashboard > Profile
+Breadcrumbs::for(Str::lower(__('text-ui.controller.profile.index.title')), function (BreadcrumbTrail $trail) {
+    $trail->parent(Str::lower(__('text-ui.breadcrumb.dashboard')));
+    $trail->push(__('text-ui.breadcrumb.profile.index'), route('profiles.index'));
+});
+
 // Dashboard > Profile > Edit
-Breadcrumbs::for('edit profile', function (BreadcrumbTrail $trail) {
-    $trail->parent('profile');
-    $trail->push('Edit');
+Breadcrumbs::for(Str::lower(__('text-ui.controller.profile.edit.title')), function (BreadcrumbTrail $trail) {
+    $trail->parent(Str::lower(__('text-ui.breadcrumb.profile.index')));
+    $trail->push(__('text-ui.breadcrumb.profile.edit'));
 });
 
 // Dashboard > User

@@ -14,7 +14,10 @@ return [
             'create' => 'Tambah Akses Pengguna',
             'edit' => 'Edit Akses Pengguna',
         ],
-        'profile' => 'Profil',
+        'profile' => [
+            'index' => 'Profil',
+            'edit' => 'Edit Profil',
+        ],
         'web-setting' => 'Pengaturan Web',
     ],
 
@@ -69,6 +72,9 @@ return [
         'profile' => [
             'index' => [
                 'title' => 'Profil'
+            ],
+            'edit' => [
+                'title' => 'Edit Profil'
             ]
         ]
     ],

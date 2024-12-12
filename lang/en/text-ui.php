@@ -14,7 +14,10 @@ return [
             'create' => 'Add User Access',
             'edit' => 'Edit User Access',
         ],
-        'profile' => 'Profile',
+        'profile' => [
+            'index' => 'Profile',
+            'edit' => 'Edit Profile',
+        ],
         'web-setting' => 'Web Settings',
     ],
 
@@ -69,6 +72,9 @@ return [
         'profile' => [
             'index' => [
                 'title' => 'Profile'
+            ],
+            'edit' => [
+                'title' => 'Edit Profile'
             ]
         ]
     ],

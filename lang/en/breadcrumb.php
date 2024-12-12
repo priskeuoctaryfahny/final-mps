@@ -16,5 +16,6 @@ return [
     'dashboard' => 'Dashboard',
     'user' => 'User Account',
     'role' => 'Role Access',
+    'profile' => 'Profile',
 
 ];

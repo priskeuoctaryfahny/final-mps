@@ -2,6 +2,6 @@
 
 return [
     'img' => [
-        'lang' => "backend/assets/img/lang/usa.png"
+        'lang' => "backend/assets/img/lang/usa.png",
     ]
 ];

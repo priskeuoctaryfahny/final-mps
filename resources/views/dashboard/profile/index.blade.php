@@ -11,7 +11,7 @@
 
     <div class="row align-items-center justify-content-between g-3 mb-4">
         <div class="col-auto">
-            <h2 class="mb-0">Profile</h2>
+            <h2 class="mb-0">{{ $title }}</h2>
         </div>
         <div class="col-auto">
             <div class="row g-2 g-sm-3">

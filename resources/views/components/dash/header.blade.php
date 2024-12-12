@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en-US" dir="ltr" data-navigation-type="default" data-navbar-horizontal-shape="default">
+<html lang="{{ app()->getLocale() }}" dir="ltr" data-navigation-type="default" data-navbar-horizontal-shape="default">
 
 <head>
     <meta charset="utf-8">
@@ -27,6 +27,7 @@
     <link rel="manifest" href="{{ asset('backend') }}/assets/img/favicons/manifest.json">
     <meta name="msapplication-TileImage" content="{{ asset('backend') }}/assets/img/favicons/mstile-150x150.png">
     <meta name="theme-color" content="#ffffff">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <script src="{{ asset('backend') }}/vendors/simplebar/simplebar.min.js"></script>
     <script src="{{ asset('backend') }}/assets/js/config.js"></script>
 

@@ -39,6 +39,11 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::resource('roles', RoleController::class);
+
+    // Users
+    Route::get('restore/{id}', [UserController::class, 'restore'])->name('users.restore');
+    Route::delete('users/force-delete/{id}', [UserController::class, 'forceDelete']);
     Route::get('users/export/{format}', [UserController::class, 'export'])->name('users.export');
+    Route::get('users/serverside', [UserController::class, 'serverside'])->name('users.serverside');
     Route::resource('users', UserController::class);
 });

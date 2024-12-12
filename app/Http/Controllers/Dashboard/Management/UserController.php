@@ -3,31 +3,37 @@
 namespace App\Http\Controllers\Dashboard\Management;
 
 use App\Models\User;
-use Illuminate\View\View;
 use Illuminate\Support\Arr;
 use App\Exports\UsersExport;
 use App\Traits\LogsActivity;
 use Illuminate\Http\Request;
 use App\Charts\UsersRoleChart;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
+use Illuminate\Contracts\View\View;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\RedirectResponse;
+use App\Http\Requests\Dashboard\UserRequest;
+use App\Http\Services\Dashboard\UserService;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 
 class UserController extends Controller
 {
     use LogsActivity, ValidatesRequests;
 
-    function __construct()
-    {
+    function __construct(
+        private UserService $userService,
+    ) {
         $this->middleware('permission:user-list|user-create|user-edit|user-delete', ['only' => ['index', 'store']]);
         $this->middleware('permission:user-create', ['only' => ['create', 'store']]);
         $this->middleware('permission:user-edit', ['only' => ['edit', 'update']]);
         $this->middleware('permission:user-delete', ['only' => ['destroy']]);
         $this->middleware('permission:user-download', ['only' => ['export']]);
+        $this->userService = $userService;
     }
     /**
      * Display a listing of the resource.
@@ -37,7 +43,7 @@ class UserController extends Controller
     public function index(UsersRoleChart $chart): View
     {
         $title = __('text-ui.controller.user.index.title');
-        $users = User::orderBy('id', 'DESC')->get();
+        $users = User::orderBy('id', 'DESC')->paginate(10);
         $chart = $chart->build();
 
         return view('dashboard.users.index', compact('users', 'title', 'chart'));
@@ -62,25 +68,35 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request): RedirectResponse
+    public function store(UserRequest $request): JsonResponse
     {
-        $this->validate($request, [
-            'name' => 'required',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|same:confirm-password',
-            'roles' => 'required'
-        ]);
+        $data = $request->validated();
+        try {
+            $data['password'] = Hash::make($data['password']);
+            $data['email_verified_at'] = now()->toDateTimeString();
+
+            $this->userService->create($data);
+
+            return response()->json([
+                'message' => 'Data Artikel Berhasil Ditambahkan...'
+            ]);
+        } catch (\Exception $error) {
+            return response()->json([
+                'message' => 'Data Artikel Gagal Ditambahkan...' . $error->getMessage()
+            ]);
+        }
 
 
-        $input = $request->all();
-        $input['password'] = Hash::make($input['password']);
-        $input['email_verified_at'] = now()->toDateTimeString();
-
-        $user = User::create($input);
-        $user->assignRole($request->input('roles'));
 
         return redirect()->route('users.index')
             ->with('success', trans('success.user-store'));
+    }
+
+    public function show(User $user): View
+    {
+        $title = __('text-ui.controller.user.show.title');
+
+        return view('dashboard.users.show', compact('user', 'title'));
     }
 
     /**
@@ -136,11 +152,45 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id): RedirectResponse
+    // public function destroy($id): RedirectResponse
+    // {
+    //     User::find($id)->delete();
+    //     return redirect()->route('users.index')
+    //         ->with('success', 'User deleted successfully');
+    // }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
     {
-        User::find($id)->delete();
-        return redirect()->route('users.index')
-            ->with('success', 'User deleted successfully');
+        $this->userService->forceDelete($id);
+        return response()->json(['message' => 'Data Pengguna Berhasil Dihapus...']);
+    }
+
+    public function forceDelete(string $id)
+    {
+        $user = $this->userService->getFirstBy('id', $id, true);
+
+        $this->userService->forceDelete($id);
+
+        return response()->json([
+            'message' => 'Data Artikel Berhasil Dihapus Permanen...',
+        ]);
+    }
+
+    public function restore(string $uuid)
+    {
+        $article = $this->userService->getFirstBy('id', $uuid, true);
+
+        $this->userService->restore($uuid);
+
+        return redirect()->back()->with('success', 'Data Artikel Berhasil Dipulihkan...');
+    }
+
+    public function serverside(Request $request): JsonResponse
+    {
+        return $this->userService->dataTable($request);
     }
 
     public function export(Request $request, $format)

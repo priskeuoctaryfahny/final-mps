@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\View\View;
+use Illuminate\Support\Str;
 use App\Traits\LogsActivity;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -26,7 +27,7 @@ class ProfileController extends Controller
         $location = Location::get(request()->ip());
         return view('dashboard.profile.index', [
             'user' => $request->user(),
-            'title' => 'Edit Profile',
+            'title' => __('text-ui.controller.profile.index.title'),
             'activity' => $request->user()->activities()->latest()->get(),
             'location' => $location,
         ]);
@@ -37,7 +38,7 @@ class ProfileController extends Controller
         $location = Location::get(request()->ip());
         return view('dashboard.profile.index', [
             'user' => $request->user(),
-            'title' => 'Edit Profile',
+            'title' => __('text-ui.controller.profile.edit.title'),
             'activity' => $request->user()->activities()->latest()->get(),
             'location' => $location,
         ]);

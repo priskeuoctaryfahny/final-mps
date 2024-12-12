@@ -16,5 +16,6 @@ return [
     'dashboard' => 'Dasbor',
     'user' => 'Akun Pengguna',
     'role' => 'Akses Pengguna',
+    'profile' => 'Profil',
 
 ];

@@ -9,6 +9,7 @@ use Illuminate\Support\Str;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Faker\Factory as Faker;
 
 class DatabaseSeeder extends Seeder
 {
@@ -55,5 +56,16 @@ class DatabaseSeeder extends Seeder
         WebSetting::create([
             'web_default_user_role' => 1
         ]);
+
+        User::factory()->count(20000)->create();
+        User::factory()->count(20000)->create();
+        User::factory()->count(20000)->create();
+        User::factory()->count(20000)->create();
+        User::factory()->count(20000)->create();
+        User::factory()->count(20000)->create();
+        User::factory()->count(20000)->create();
+        User::factory()->count(20000)->create();
+        User::factory()->count(20000)->create();
+        User::factory()->count(20000)->create();
     }
 }
