@@ -1,3 +1,15 @@
+
+
+
+
+toastr.options = {
+    "closeButton": true,
+    "progressBar": true,
+    "timeOut": 3000,
+    "positionClass": "toast-top-right",
+    "preventDuplicates": true
+}
+
 let Toast = Swal.mixin({
     toast: true,
     position: 'top-end',
@@ -6,10 +18,7 @@ let Toast = Swal.mixin({
 })
 
 const toastSuccess = (message) => {
-    Toast.fire({
-        icon: 'success',
-        title: message
-    })
+    toastr.success(message);
 }
 
 const toastError = (message) => {
@@ -22,25 +31,27 @@ const toastError = (message) => {
         break;
     }
 
-    Toast.fire({
-        icon: 'error',
-        title: 'Ops! Data Tidak Valid <br>' + errorText
-    })
+    toastr.error(errorText);
 }
 
-const startLoading = (str = 'Please wait...') => {
+const startLoading = (str = 'Tunggu Sebentar...') => {
+    document.getElementById('loadingOverlay').style.display = 'block'; // Show overlay
     Swal.fire({
         title: 'Loading!',
         text: str,
         allowOutsideClick: false,
         didOpen: () => {
             Swal.showLoading()
-        }
+        },
+        willClose: () => {
+            document.getElementById('loadingOverlay').style.display = 'none'; // Hide overlay when closing
+        },
     })
 }
 
 const stopLoading = () => {
-    Swal.close()
+    Swal.close(); // Close SweetAlert
+    document.getElementById('loadingOverlay').style.display = 'none'; // Hide overlay
 }
 
 const reloadTable = () => {
@@ -56,3 +67,10 @@ const resetValidation = () => {
     $('.is-valid').removeClass('is-valid');
     $('span.invalid-feedback').remove();
 }
+
+startLoading();
+window.onload = () => {
+    stopLoading();
+};
+
+

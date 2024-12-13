@@ -7,7 +7,7 @@
     @endslot
 
 
-    <div class="mb-9 d-print-none">
+    <div class="mb-9">
         <div id="projectSummary">
             <div class="row justify-content-between mb-4 gx-6 gy-3 align-items-center">
                 <div class="col-auto">
@@ -63,7 +63,8 @@
                                 class="fa-solid fa-plus me-2"></i>Add new user</a></div>
                 @endcan
             </div>
-            <div class="table-responsive-sm scrollbar">
+
+            <div class="table-responsive-sm scrollbar d-print-none">
                 <table class="table table-bordered table-striped" id="yajra" width="100%">
                     <thead>
                         <tr>
@@ -82,12 +83,8 @@
     </div>
 
     @push('footer')
-        <script src="https://code.jquery.com/jquery-4.0.0-beta.2.js"></script>
-        <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
-        <script src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap5.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
         <script src="{{ asset('vendor/larapex-charts/apexcharts.js') }}"></script>
-        <script src={{ asset('backend/js/helper.js') }}></script>
         <script src={{ asset('backend/js/dashboard/user.js') }}></script>
         {{ $chart->script() }}
     @endpush

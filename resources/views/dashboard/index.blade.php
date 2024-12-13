@@ -9,7 +9,7 @@
                 class="img-fluid mb-7 d-light-none" src="{{ asset('backend') }}/assets/img/spot-illustrations/dark_2.png"
                 width="470" alt="" />
             <h1 class="text-body-secondary fw-normal mb-5">Create Something Beautiful.</h1><a
-                class="btn btn-lg btn-primary" href="{{ asset('backend') }}/documentation/getting-started.html">Getting
+                class="btn btn-lg btn-primary" href="#" onclick="startLoading('{{ $title }}')">Getting
                 Started</a>
         </div>
     </div>

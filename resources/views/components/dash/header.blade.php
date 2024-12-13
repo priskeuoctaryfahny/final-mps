@@ -51,8 +51,6 @@
         id="user-style-rtl">
     <link href="{{ asset('backend') }}/assets/css/user.min.css" type="text/css" rel="stylesheet"
         id="user-style-default">
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
-        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastr@latest/build/toastr.min.css">
     <script>
         var phoenixIsRTL = window.config.config.phoenixIsRTL;
@@ -69,12 +67,21 @@
             userLinkRTL.setAttribute('disabled', true);
         }
     </script>
+    <style>
+        #loadingOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 1055;
+        }
+    </style>
 </head>
 
 
 <body>
-
-    <!-- ===============================================-->
-    <!--    Main Content-->
-    <!-- ===============================================-->
+    <div id="loadingOverlay"></div>
     <main class="main" id="top">

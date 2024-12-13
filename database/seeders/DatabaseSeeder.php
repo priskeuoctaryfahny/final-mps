@@ -5,11 +5,11 @@ namespace Database\Seeders;
 use App\Models\User;
 use App\Models\WebSetting;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Faker\Factory as Faker;
 use Illuminate\Support\Str;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
-use Faker\Factory as Faker;
 
 class DatabaseSeeder extends Seeder
 {
@@ -57,15 +57,14 @@ class DatabaseSeeder extends Seeder
             'web_default_user_role' => 1
         ]);
 
-        User::factory()->count(20000)->create();
-        User::factory()->count(20000)->create();
-        User::factory()->count(20000)->create();
-        User::factory()->count(20000)->create();
-        User::factory()->count(20000)->create();
-        User::factory()->count(20000)->create();
-        User::factory()->count(20000)->create();
-        User::factory()->count(20000)->create();
-        User::factory()->count(20000)->create();
+        for ($i = 0; $i <= 100; $i++) {
+            $faker = Faker::create();
+            Role::create([
+                'name' => $faker->name,
+                'guard_name' => 'web',
+            ]);
+        }
+
         User::factory()->count(20000)->create();
     }
 }

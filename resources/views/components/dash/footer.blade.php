@@ -59,64 +59,6 @@
             </div>
             <p class="mb-0 text-body-tertiary">Change text direction</p>
         </div>
-        <div class="border border-translucent rounded-3 p-4 setting-panel-item bg-body-emphasis">
-            <div class="d-flex justify-content-between align-items-center">
-                <h5 class="setting-panel-item-title mb-1">Support Chat </h5>
-                <div class="form-check form-switch mb-0">
-                    <input class="form-check-input ms-auto" type="checkbox" data-theme-control="phoenixSupportChat" />
-                </div>
-            </div>
-            <p class="mb-0 text-body-tertiary">Toggle support chat</p>
-        </div>
-        <div class="setting-panel-item">
-            <h5 class="setting-panel-item-title">Navigation Type</h5>
-            <div class="row gx-2">
-                <div class="col-6">
-                    <input class="btn-check" id="navbarPositionVertical" name="navigation-type" type="radio"
-                        value="vertical" data-theme-control="phoenixNavbarPosition"
-                        data-page-url="{{ asset('backend') }}/documentation/layouts/vertical-navbar.html" />
-                    <label class="btn d-inline-block btn-navbar-style fs-9" for="navbarPositionVertical"> <span
-                            class="rounded d-block"><img class="img-fluid img-prototype d-dark-none"
-                                src="{{ asset('backend') }}/assets/img/generic/default-light.png" alt="" /><img
-                                class="img-fluid img-prototype d-light-none"
-                                src="{{ asset('backend') }}/assets/img/generic/default-dark.png"
-                                alt="" /></span><span class="label-text">Vertical</span></label>
-                </div>
-                <div class="col-6">
-                    <input class="btn-check" id="navbarPositionHorizontal" name="navigation-type" type="radio"
-                        value="horizontal" data-theme-control="phoenixNavbarPosition"
-                        data-page-url="{{ asset('backend') }}/documentation/layouts/horizontal-navbar.html" />
-                    <label class="btn d-inline-block btn-navbar-style fs-9" for="navbarPositionHorizontal"> <span
-                            class="rounded d-block"><img class="img-fluid img-prototype d-dark-none"
-                                src="{{ asset('backend') }}/assets/img/generic/top-default.png" alt="" /><img
-                                class="img-fluid img-prototype d-light-none"
-                                src="{{ asset('backend') }}/assets/img/generic/top-default-dark.png"
-                                alt="" /></span><span class="label-text"> Horizontal</span></label>
-                </div>
-                <div class="col-6">
-                    <input class="btn-check" id="navbarPositionCombo" name="navigation-type" type="radio"
-                        value="combo" data-theme-control="phoenixNavbarPosition"
-                        data-page-url="{{ asset('backend') }}/documentation/layouts/combo-navbar.html" />
-                    <label class="btn d-inline-block btn-navbar-style fs-9" for="navbarPositionCombo"> <span
-                            class="rounded d-block"><img class="img-fluid img-prototype d-dark-none"
-                                src="{{ asset('backend') }}/assets/img/generic/nav-combo-light.png"
-                                alt="" /><img class="img-fluid img-prototype d-light-none"
-                                src="{{ asset('backend') }}/assets/img/generic/nav-combo-dark.png"
-                                alt="" /></span><span class="label-text"> Combo</span></label>
-                </div>
-                <div class="col-6">
-                    <input class="btn-check" id="navbarPositionTopDouble" name="navigation-type" type="radio"
-                        value="dual-nav" data-theme-control="phoenixNavbarPosition"
-                        data-page-url="{{ asset('backend') }}/documentation/layouts/dual-nav.html" />
-                    <label class="btn d-inline-block btn-navbar-style fs-9" for="navbarPositionTopDouble"> <span
-                            class="rounded d-block"><img class="img-fluid img-prototype d-dark-none"
-                                src="{{ asset('backend') }}/assets/img/generic/dual-light.png" alt="" /><img
-                                class="img-fluid img-prototype d-light-none"
-                                src="{{ asset('backend') }}/assets/img/generic/dual-dark.png"
-                                alt="" /></span><span class="label-text"> Dual nav</span></label>
-                </div>
-            </div>
-        </div>
         <div class="setting-panel-item">
             <h5 class="setting-panel-item-title">Vertical Navbar Appearance</h5>
             <div class="row gx-2">
@@ -145,33 +87,6 @@
             </div>
         </div>
         <div class="setting-panel-item">
-            <h5 class="setting-panel-item-title">Horizontal Navbar Shape</h5>
-            <div class="row gx-2">
-                <div class="col-6">
-                    <input class="btn-check" id="navbarShapeDefault" name="navbar-shape" type="radio"
-                        value="default" data-theme-control="phoenixNavbarTopShape"
-                        data-page-url="{{ asset('backend') }}/documentation/layouts/horizontal-navbar.html" />
-                    <label class="btn d-inline-block btn-navbar-style fs-9" for="navbarShapeDefault"> <span
-                            class="mb-2 rounded d-block"><img class="img-fluid img-prototype d-dark-none mb-0"
-                                src="{{ asset('backend') }}/assets/img/generic/top-default.png" alt="" /><img
-                                class="img-fluid img-prototype d-light-none mb-0"
-                                src="{{ asset('backend') }}/assets/img/generic/top-default-dark.png"
-                                alt="" /></span><span class="label-text">Default</span></label>
-                </div>
-                <div class="col-6">
-                    <input class="btn-check" id="navbarShapeSlim" name="navbar-shape" type="radio" value="slim"
-                        data-theme-control="phoenixNavbarTopShape"
-                        data-page-url="{{ asset('backend') }}/documentation/layouts/horizontal-navbar.html#horizontal-navbar-slim" />
-                    <label class="btn d-inline-block btn-navbar-style fs-9" for="navbarShapeSlim"> <span
-                            class="mb-2 rounded d-block"><img class="img-fluid img-prototype d-dark-none mb-0"
-                                src="{{ asset('backend') }}/assets/img/generic/top-slim.png" alt="" /><img
-                                class="img-fluid img-prototype d-light-none mb-0"
-                                src="{{ asset('backend') }}/assets/img/generic/top-slim-dark.png"
-                                alt="" /></span><span class="label-text"> Slim</span></label>
-                </div>
-            </div>
-        </div>
-        <div class="setting-panel-item">
             <h5 class="setting-panel-item-title">Horizontal Navbar Appearance</h5>
             <div class="row gx-2">
                 <div class="col-6">
@@ -196,9 +111,7 @@
                             class="label-text d-light-none">Lighter</span></label>
                 </div>
             </div>
-        </div><a class="bun btn-primary d-grid mb-3 text-white mt-5 btn btn-primary"
-            href="https://themes.getbootstrap.com/product/phoenix-admin-dashboard-webapp-template/"
-            target="_blank">Purchase template</a>
+        </div>
     </div>
 </div>
 <a class="card setting-toggle" href="#settings-offcanvas" data-bs-toggle="offcanvas">
@@ -233,6 +146,11 @@
 <script src="{{ asset('backend') }}/vendors/feather-icons/feather.min.js"></script>
 <script src="{{ asset('backend') }}/vendors/dayjs/dayjs.min.js"></script>
 <script src="{{ asset('backend') }}/assets/js/phoenix.js"></script>
+<script src="https://code.jquery.com/jquery-4.0.0-beta.2.js"></script>
+<script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+<script src="https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap5.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src={{ asset('backend/js/helper.js') }}></script>
 
 @stack('footer')
 @stack('chart')
@@ -266,15 +184,6 @@
     @if (session('error'))
         toastr.error("{{ session('error') }}");
     @endif
-</script>
-
-<script type="module">
-    window.Echo.channel('posts')
-        .listen('.create', (data) => {
-            var notificationDiv = document.getElementById('notification');
-            notificationDiv.insertAdjacentHTML('beforeend',
-                toastr.warning(data.message));
-        });
 </script>
 
 </body>
