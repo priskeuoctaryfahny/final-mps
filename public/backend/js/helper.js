@@ -1,7 +1,3 @@
-
-
-
-
 toastr.options = {
     "closeButton": true,
     "progressBar": true,
@@ -67,10 +63,5 @@ const resetValidation = () => {
     $('.is-valid').removeClass('is-valid');
     $('span.invalid-feedback').remove();
 }
-
-startLoading();
-window.onload = () => {
-    stopLoading();
-};
 
 

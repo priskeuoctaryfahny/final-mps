@@ -13,6 +13,9 @@ Route::get('/', function () {
     return Auth::check() ? redirect()->route('dashboard') : redirect()->route('login');
 });
 
+Route::get('/tes', function () {
+    return view('tes');
+});
 Route::get('lang', [LanguageController::class, 'change'])->name("change.lang");
 
 

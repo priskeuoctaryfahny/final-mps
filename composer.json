@@ -19,6 +19,7 @@
         "maatwebsite/excel": "^3.1",
         "spatie/laravel-permission": "^6.10",
         "stevebauman/location": "^7.4",
+        "yajra/laravel-datatables-export": "^11.1",
         "yajra/laravel-datatables-oracle": "^11.1"
     },
     "require-dev": {
