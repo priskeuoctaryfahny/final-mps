@@ -17,9 +17,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Schema;
 use App\Http\Requests\Dashboard\UserRequest;
 use App\Http\Services\Dashboard\UserService;
 use Illuminate\Foundation\Validation\ValidatesRequests;
+use PDF;
 
 class UserController extends Controller
 {
@@ -42,11 +44,24 @@ class UserController extends Controller
      */
     public function index(UsersRoleChart $chart): View
     {
+        $columns = Schema::getColumnListing((new User())->getTable());
+
+        $columnLabels = [
+            'name' => 'Nama Lengkap',
+            'email' => 'Alamat Email',
+        ];
+
+        // Define columns to exclude
+        $excludedColumns = ['id', 'password', 'whatsapp', 'date_of_birth', 'gender', 'google_id', 'remember_token', 'email_verified_at', 'google_token', 'picture', 'created_at', 'updated_at'];
+
+        // Filter out excluded columns
+        $columns = array_diff($columns, $excludedColumns);
+
         $title = __('text-ui.controller.user.index.title');
         $users = User::orderBy('id', 'DESC')->paginate(10);
         $chart = $chart->build();
 
-        return view('dashboard.users.index', compact('users', 'title', 'chart'));
+        return view('dashboard.users.index', compact('users', 'title', 'chart', 'columns', 'columnLabels'));
     }
 
     /**
@@ -185,7 +200,7 @@ class UserController extends Controller
 
         $this->userService->restore($uuid);
 
-        return redirect()->back()->with('success', 'Data Artikel Berhasil Dipulihkan...');
+        return redirect()->back()->with('success', 'Data Pengguna Berhasil Dipulihkan');
     }
 
     public function serverside(Request $request): JsonResponse
@@ -195,19 +210,30 @@ class UserController extends Controller
 
     public function export(Request $request, $format)
     {
-        $users = User::all();
+        $selectedColumns = $request->input('columns', []);
+        $startDate = $request->input('startDate');
+        $endDate = $request->input('endDate');
+
+        $users = User::where('created_at', '>=', $startDate)->where('id', '!=', 1)->where('created_at', '<=', $endDate)->limit(100)->get($selectedColumns);
+
         if ($users->isEmpty()) {
-            return redirect()->back()->with('error', 'Data master disposisi tidak ditemukan.');
+            return redirect()->back()->with('error', 'Data pengguna tidak ditemukan.');
         }
         $description = 'Pengguna ' . Auth::user()->name . ' mengunduh data pengguna dalam format ' . $format;
-        $this->logActivity('outgoing_letters', Auth::user(), null, $description);
+        $this->logActivity('users', Auth::user(), null, $description);
+
+        $columnLabels = [
+            'name' => 'Nama Lengkap',
+            'email' => 'Alamat Email',
+        ];
 
         $title = 'Master Data Pengguna';
         if ($format === 'pdf') {
-            $pdf = PDF::loadView('dashboard.pdf.testing', compact('users', 'title'));
-            return $pdf->download('users.pdf');
+            $pdf = PDF::loadView('dashboard.users.pdf', compact('users', 'title', 'columnLabels', 'selectedColumns'));
+            return $pdf->download('Data Pengguna.pdf');
         } elseif ($format === 'excel') {
-            return Excel::download(new UsersExport, 'users.xlsx');
+            $users = User::where('created_at', '>=', $startDate)->where('id', '!=', 1)->where('created_at', '<=', $endDate)->get($selectedColumns);
+            return Excel::download(new UsersExport($users, $selectedColumns), 'users.xlsx');
         }
 
         return redirect()->back()->with('error', 'Format file tidak ditemukan.');

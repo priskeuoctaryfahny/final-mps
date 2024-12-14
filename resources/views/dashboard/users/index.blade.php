@@ -32,37 +32,8 @@
                                     </a>
                                 @endcan
                                 @can('user-download')
-                                    <div class="btn-group">
-                                        <div class="dropdown">
-                                            <button class="btn btn-sm btn-secondary dropdown-toggle" type="button"
-                                                id="exportDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                                <i class="fa-solid fa-file-export me-2"></i>Export
-                                            </button>
-                                            <ul class="dropdown-menu" aria-labelledby="exportDropdown">
-                                                <li>
-                                                    <form action="{{ route('users.export', 'pdf') }}" method="get"
-                                                        id="exportPdfForm">
-                                                        <button class="dropdown-item" type="submit">
-                                                            Export PDF
-                                                        </button>
-                                                    </form>
-                                                </li>
-                                                <li>
-                                                    <form action="{{ route('users.export', 'excel') }}" method="get"
-                                                        id="exportExcelForm">
-                                                        <button class="dropdown-item" type="submit">
-                                                            Export Excel
-                                                        </button>
-                                                    </form>
-                                                </li>
-                                                <li>
-                                                    <button class="dropdown-item" onclick="window.print()">
-                                                        Export Diagram
-                                                    </button>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
+                                    <x-dash.export-button />
+                                    <x-dash.export-modal :columns="json_encode($columns)" :columnLabels="json_encode($columnLabels)" />
                                 @endcan
                             </nav>
                         </div>

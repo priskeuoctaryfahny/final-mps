@@ -10,7 +10,6 @@ function userTable() {
         processing: true,
         serverSide: true,
         responsive: true,
-        // pageLength: 20, // set default records per page
         ajax: "/users/serverside",
         columns: [{
                 data: 'DT_RowIndex',
