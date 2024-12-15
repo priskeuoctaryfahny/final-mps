@@ -28,7 +28,12 @@ class DatabaseSeeder extends Seeder
             ['name' => 'user-create', 'description' => 'Menambah data Pengguna'],
             ['name' => 'user-edit', 'description' => 'Mengubah data Pengguna'],
             ['name' => 'user-delete', 'description' => 'Menghapus data Pengguna'],
-            ['name' => 'user-download', 'description' => 'Mengunduh data Pengguna']
+            ['name' => 'user-download', 'description' => 'Mengunduh data Pengguna'],
+            ['name' => 'renstra-list', 'description' => 'Melihat data Renstra Kadis'],
+            ['name' => 'renstra-create', 'description' => 'Menambah data Renstra Kadis'],
+            ['name' => 'renstra-edit', 'description' => 'Mengubah data Renstra Kadis'],
+            ['name' => 'renstra-delete', 'description' => 'Menghapus data Renstra Kadis'],
+            ['name' => 'renstra-download', 'description' => 'Mengunduh data Renstra Kadis']
         ];
 
         foreach ($permissions as $permission) {
@@ -57,7 +62,7 @@ class DatabaseSeeder extends Seeder
             'web_default_user_role' => 1
         ]);
 
-        for ($i = 0; $i <= 100; $i++) {
+        for ($i = 0; $i <= 10; $i++) {
             $faker = Faker::create();
             Role::create([
                 'name' => $faker->name,
@@ -65,6 +70,6 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        User::factory()->count(20000)->create();
+        User::factory()->count(22)->create();
     }
 }

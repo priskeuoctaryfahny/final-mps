@@ -8,9 +8,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
-use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Schema;
+use App\Services\Dashboard\RoleService;
 use Spatie\Permission\Models\Permission;
+use App\Http\Requests\Dashboard\RoleRequest;
+use Illuminate\Foundation\Validation\ValidatesRequests;
 
 class RoleController extends Controller
 {
@@ -20,12 +23,14 @@ class RoleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    function __construct()
-    {
+    function __construct(
+        private RoleService $roleService,
+    ) {
         $this->middleware('permission:role-list|role-create|role-edit|role-delete', ['only' => ['index', 'store']]);
         $this->middleware('permission:role-create', ['only' => ['create', 'store']]);
         $this->middleware('permission:role-edit', ['only' => ['edit', 'update']]);
         $this->middleware('permission:role-delete', ['only' => ['destroy']]);
+        $this->roleService = $roleService;
     }
 
     /**
@@ -35,9 +40,11 @@ class RoleController extends Controller
      */
     public function index(Request $request): View
     {
+        $columnDetail = $this->roleService->getAttributesWithDetails();
+
         $title = __('text-ui.controller.role.index.title');
         $roles = Role::orderBy('id', 'DESC')->get();
-        return view('dashboard.roles.index', compact('title', 'roles'));
+        return view('dashboard.roles.index', compact('title', 'roles', 'columnDetail'));
     }
 
     /**

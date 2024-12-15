@@ -1,27 +1,51 @@
 let submit_method;
 
 $(document).ready(function () {
-    userTable();
+    rendisTable();
 });
 
 // datatable serverside
-function userTable() {
+function rendisTable() {
     $('#yajra').DataTable({
         processing: true,
         serverSide: true,
         responsive: true,
-        ajax: "/users/serverside",
+        ajax: "/rendis/serverside",
         columns: [{
                 data: 'DT_RowIndex',
                 name: 'DT_RowIndex'
             },
             {
-                data: 'name',
-                name: 'name'
+                data: 'nomor_agenda',
+                name: 'nomor_agenda'
             },
             {
-                data: 'email',
-                name: 'email'
+                data: 'nama_agenda_renstra',
+                name: 'nama_agenda_renstra'
+            },
+            {
+                data: 'deskripsi_uraian_renstra',
+                name: 'deskripsi_uraian_renstra'
+            },
+            {
+                data: 'disposisi_diteruskan',
+                name: 'disposisi_diteruskan'
+            },
+            {
+                data: 'tanggal_mulai',
+                name: 'tanggal_mulai'
+            },
+            {
+                data: 'tanggal_akhir',
+                name: 'tanggal_akhir'
+            },
+            {
+                data: 'status',
+                name: 'status'
+            },
+            {
+                data: 'is_terlaksana',
+                name: 'is_terlaksana'
             },
             {
                 data: 'action',
@@ -38,7 +62,7 @@ const deleteData = (e) => {
 
     Swal.fire({
         title: "Are you sure?",
-        text: "Do you want to delete this article?",
+        text: "Do you want to delete this renstra?",
         icon: "question",
         confirmButtonColor: "#d33",
         cancelButtonColor: "#3085d6",
@@ -55,7 +79,7 @@ const deleteData = (e) => {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 type: "DELETE",
-                url: "/users/" + id,
+                url: "/rendis/" + id,
                 dataType: "json",
                 success: function (response) {
                     reloadTable();

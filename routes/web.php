@@ -6,6 +6,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\WebSettingController;
 use App\Http\Controllers\Auth\GoogleController;
+use App\Http\Controllers\RendisController;
 use App\Http\Controllers\Dashboard\Management\RoleController;
 use App\Http\Controllers\Dashboard\Management\UserController;
 
@@ -49,4 +50,10 @@ Route::middleware('auth')->group(function () {
     Route::get('users/export/{format}', [UserController::class, 'export'])->name('users.export');
     Route::get('users/serverside', [UserController::class, 'serverside'])->name('users.serverside');
     Route::resource('users', UserController::class);
+
+    // Rendis
+    Route::delete('rendis/force-delete/{id}', [RenDisController::class, 'forceDelete']);
+    Route::get('rendis/export/{format}', [RenDisController::class, 'export'])->name('rendis.export');
+    Route::get('rendis/serverside', [RenDisController::class, 'serverside'])->name('rendis.serverside');
+    Route::resource('rendis', RenDisController::class);
 });
