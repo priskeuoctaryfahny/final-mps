@@ -132,10 +132,6 @@
 </a>
 
 
-<!-- ===============================================-->
-<!--    JavaScripts-->
-<!-- ===============================================-->
-<script src="https://cdn.jsdelivr.net/npm/toastr@latest/build/toastr.min.js"></script>
 <script src="{{ asset('backend') }}/vendors/popper/popper.min.js"></script>
 <script src="{{ asset('backend') }}/vendors/bootstrap/bootstrap.min.js"></script>
 <script src="{{ asset('backend') }}/vendors/anchorjs/anchor.min.js"></script>
@@ -154,35 +150,27 @@
 
 @stack('footer')
 @stack('chart')
-<script>
-    toastr.options = {
-        "closeButton": true,
-        "progressBar": true,
-        "timeOut": 3000,
-        "positionClass": "toast-top-right",
-        "preventDuplicates": true
-    }
 
+<script>
     @if ($errors->any())
         @foreach ($errors->all() as $error)
-            toastr.error("{{ $error }}");
+        toastErrorOri("{{ $error }}");
         @endforeach
     @endif
 
     @if (session('success'))
-        toastr.success("{{ session('success') }}");
+    toastSuccess("{{ session('success') }}");
     @endif
-
     @if (session('info'))
-        toastr.info("{{ session('info') }}");
+        toastInfo("{{ session('info') }}");
     @endif
 
     @if (session('warning'))
-        toastr.warning("{{ session('warning') }}");
+    toastWarning("{{ session('warning') }}");
     @endif
 
     @if (session('error'))
-        toastr.error("{{ session('error') }}");
+    toastErrorOri("{{ session('error') }}");
     @endif
 </script>
 

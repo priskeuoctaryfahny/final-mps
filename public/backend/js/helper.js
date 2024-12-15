@@ -1,10 +1,4 @@
-toastr.options = {
-    "closeButton": true,
-    "progressBar": true,
-    "timeOut": 3000,
-    "positionClass": "toast-top-right",
-    "preventDuplicates": true
-}
+
 
 let Toast = Swal.mixin({
     toast: true,
@@ -14,7 +8,31 @@ let Toast = Swal.mixin({
 })
 
 const toastSuccess = (message) => {
-    toastr.success(message);
+    Toast.fire({
+        icon: 'success',
+        title: message
+    })
+}
+
+const toastInfo = (message) => {
+    Toast.fire({
+        icon: 'info',
+        title: message
+    })
+}
+
+const toastWarning = (message) => {
+    Toast.fire({
+        icon: 'warning',
+        title: message
+    })
+}
+
+const toastErrorOri = (message) => {
+    Toast.fire({
+        icon: 'error',
+        title: message
+    })
 }
 
 const toastError = (message) => {
@@ -27,27 +45,26 @@ const toastError = (message) => {
         break;
     }
 
-    toastr.error(errorText);
+    Toast.fire({
+        icon: 'error',
+        title: 'Ops! Data Tidak Valid <br>' + errorText
+    })
 }
 
-const startLoading = (str = 'Tunggu Sebentar...') => {
-    document.getElementById('loadingOverlay').style.display = 'block'; // Show overlay
+
+const startLoading = (str = 'Please wait...') => {
     Swal.fire({
         title: 'Loading!',
         text: str,
         allowOutsideClick: false,
         didOpen: () => {
             Swal.showLoading()
-        },
-        willClose: () => {
-            document.getElementById('loadingOverlay').style.display = 'none'; // Hide overlay when closing
-        },
+        }
     })
 }
 
 const stopLoading = () => {
-    Swal.close(); // Close SweetAlert
-    document.getElementById('loadingOverlay').style.display = 'none'; // Hide overlay
+    Swal.close()
 }
 
 const reloadTable = () => {
