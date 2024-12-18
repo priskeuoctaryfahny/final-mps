@@ -2,13 +2,16 @@
 
 namespace App\Http\Services\Dashboard;
 
+use Exception;
 use App\Models\User;
-use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 
 class UserService
 {
+    protected $tableName = 'users';
     public function dataTable($request)
     {
         if ($request->ajax()) {
@@ -24,14 +27,14 @@ class UserService
                         ->with('role:id,name')
                         ->skip($start)
                         ->take($limit)
-                        ->get(['id', 'name', 'email']);
+                        ->get(array_merge(['id'], $this->columns()));
                 } else {
                     $data = User::filter($request->search['value'])
                         ->latest()
                         ->with('role:id,name')
                         ->skip($start)
                         ->take($limit)
-                        ->get(['id', 'name', 'email']);
+                        ->get(array_merge(['id'], $this->columns()));
 
                     $totalFiltered = $data->count();
                 }
@@ -39,18 +42,10 @@ class UserService
                 return DataTables::of($data)
                     ->addIndexColumn()
                     ->setOffset($start)
-                    ->editColumn('name', function ($data) {
-                        return $data->name;
-                    })
-                    ->editColumn('email', function ($data) {
-                        return '<div>
-                        <span class="badge bg-secondary">' . $data->email . '</span>
-                    </div>';
-                    })
                     ->addColumn('action', function ($data) {
                         $actionBtn = '
                     <div class="text-center" width="10%">
-                        <div class="btn-group">
+                        <div class="btn-group mx-1">
                             <a href="' . route('users.show', $data->id) . '"  class="btn btn-sm btn-secondary">
                                 <i class="fas fa-eye"></i>
                             </a>
@@ -68,7 +63,7 @@ class UserService
 
                         return $actionBtn;
                     })
-                    ->rawColumns(['name', 'email', 'action'])
+                    ->rawColumns(array_merge($this->columns(), ['action']))
                     ->with([
                         'recordsTotal' => $totalData,
                         'recordsFiltered' => $totalFiltered,
@@ -116,14 +111,6 @@ class UserService
         return $getUser;
     }
 
-    public function restore(string $id)
-    {
-        $getUser = $this->getFirstBy('id', $id);
-        $getUser->restore();
-
-        return $getUser;
-    }
-
     public function forceDelete(string $id)
     {
         $getUser = $this->getFirstBy('id', $id);
@@ -131,5 +118,86 @@ class UserService
         $getUser->forceDelete();
 
         return $getUser;
+    }
+
+    public function columnLabels()
+    {
+        return [
+            'name' => 'Nama Lengkap',
+            'email' => 'Alamat Email',
+            'gender' => 'Jenis Kelamin',
+            'whatsapp' => 'No Whatsapp',
+            'date_of_birth' => 'Tanggal Lahir',
+            'password' => 'Password',
+        ];
+    }
+
+    public function columnExclude()
+    {
+        return ['id', 'password', 'google_id', 'remember_token', 'email_verified_at', 'google_token', 'picture', 'created_at', 'updated_at'];
+    }
+
+    public function columnTypes()
+    {
+        return [
+            'name' => 'string',
+            'email' => 'email',
+            'gender' => 'option',
+            'whatsapp' => 'string',
+            'date_of_birth' => 'date',
+            'password' => 'password',
+        ];
+    }
+
+    public function columns()
+    {
+        return array_diff(Schema::getColumnListing((new User())->getTable()), $this->columnExclude());
+    }
+
+
+    public function getAttributesWithDetails()
+    {
+        // Get the columns from the table, excluding specific columns
+        $columns = Schema::getColumnListing($this->tableName);
+        $excludedColumns = $this->columnExclude();
+        $filteredColumns = array_filter($columns, function ($column) use ($excludedColumns) {
+            return !in_array($column, $excludedColumns);
+        });
+
+        // Define your labels and data types
+        $labels = $this->columnLabels();
+
+        $dataTypes = $this->columnTypes();
+
+        // Create an array with keys, their corresponding labels, data types, and required status
+        $attributesWithDetails = [];
+        foreach ($filteredColumns as $column) {
+            if (array_key_exists($column, $labels) && array_key_exists($column, $dataTypes)) {
+                // Check if the column is nullable
+                if (app()->make('db')->connection()->getDriverName() === 'sqlite') {
+                    // Get column info for SQLite
+                    $columnsInfo = app()->make('db')->select("PRAGMA table_info($this->tableName)");
+                    $columnInfo = collect($columnsInfo)->firstWhere('name', $column);
+                    $isNullable = $columnInfo->notnull == 0; // notnull is 0 if the column is nullable
+                } else {
+                    // Use information_schema for other databases
+                    $result = app()->make('db')->select("SELECT is_nullable FROM information_schema.columns WHERE table_name = ? AND column_name = ?", [$this->tableName, $column]);
+
+                    if (empty($result)) {
+                        throw new Exception("No results found for the specified table and column.");
+                    }
+
+                    $isNullable = $result[0]->IS_NULLABLE === 'YES';
+                }
+
+                $attributesWithDetails[$column] = [
+                    'label' => $labels[$column],
+                    'type' => $dataTypes[$column],
+                    'required' => !$isNullable, // Required if not nullable
+                ];
+            }
+        }
+
+        return $attributesWithDetails;
     }
 }

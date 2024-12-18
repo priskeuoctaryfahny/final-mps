@@ -15,13 +15,13 @@
                     <div class="col col-sm-6 col-lg-7 col-xl-6">
                         <a class="d-flex flex-center text-decoration-none mb-4" href="{{ asset('backend') }}/index.html">
                             <div class="d-flex align-items-center fw-bolder fs-3 d-inline-block"><img
-                                    src="{{ asset('backend') }}/assets/img/icons/logo.png" alt="phoenix"
-                                    width="58" />
+                                    src="{{ $sets->web_logo ? Storage::url($sets->web_logo) : asset('backend/assets/img/default/nope.jpg') }}"
+                                    alt="phoenix" width="58" />
                             </div>
                         </a>
                         <div class="text-center mb-7">
-                            <h3 class="text-body-highlight">Create Account</h3>
-                            <p class="text-body-tertiary">Please fill in the details below</p>
+                            <h3 class="text-body-highlight">Buat Akun</h3>
+                            <p class="text-body-tertiary">Lengkapi data diri anda</p>
                         </div>
 
                         @if ($errors->any())
@@ -40,7 +40,7 @@
                         <form method="POST" action="{{ route('register') }}">
                             @csrf
                             <div class="mb-3 text-start">
-                                <label class="form-label" for="name">Name</label>
+                                <label class="form-label" for="name">Nama Lengkap</label>
                                 <div class="form-icon-container">
                                     <input class="form-control form-icon-input" id="name" name="name"
                                         type="text" placeholder="Your Name" value="{{ old('name') }}" required
@@ -51,7 +51,7 @@
                             </div>
 
                             <div class="mb-3 text-start">
-                                <label class="form-label" for="email">Email address</label>
+                                <label class="form-label" for="email">Alamat Email</label>
                                 <div class="form-icon-container">
                                     <input class="form-control form-icon-input" id="email" name="email"
                                         type="email" placeholder="name@example.com" value="{{ old('email') }}"

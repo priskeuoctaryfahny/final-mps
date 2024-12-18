@@ -10,13 +10,29 @@
                 action="{{ route('roles.update', $role->id) }}" onsubmit="showLoader()">
                 @csrf
                 @method('PUT')
-                <div class="col-sm-12 col-md-12">
-                    <div class="form-floating">
-                        <input class="form-control" id="floatingInputGrid" type="text" name="name"
-                            placeholder="Name" value="{{ $role->name }}" />
-                        <label for="floatingInputGrid">Name</label>
+                @foreach ($columnDetail as $column => $details)
+                    <div class="col-sm-12 col-md-12">
+                        @if ($details['type'] === 'string')
+                            <div class="form-floating">
+                                <input class="form-control" type="text" name="{{ $column }}"
+                                    id="{{ $column }}" placeholder="{{ $details['label'] }}"
+                                    {{ $details['required'] ? 'required' : '' }} value="{{ $role->{$column} ?? '' }}">
+                                <label for="{{ $column }}">{{ $details['label'] }}</label>
+                            </div>
+                        @elseif ($details['type'] === 'integer')
+                            <div class="form-floating">
+                                <input class="form-control" type="number" name="{{ $column }}"
+                                    id="{{ $column }}" placeholder="{{ $details['label'] }}"
+                                    {{ $details['required'] ? 'required' : '' }} value="{{ $role->{$column} ?? '' }}">
+                                <label for="{{ $column }}">{{ $details['label'] }}</label>
+                            </div>
+                        @elseif ($details['type'] === 'boolean')
+                            <input class="form-control" type="checkbox" name="{{ $column }}"
+                                id="{{ $column }}" value="1" {{ $details['required'] ? 'required' : '' }}
+                                value="{{ $role->{$column} ?? '' }}">
+                        @endif
                     </div>
-                </div>
+                @endforeach
                 <div class="col-12 gy-6">
                     <div class="form-floating form-floating-advance-select">
                         <label>Add Permission</label>
@@ -26,7 +42,7 @@
                             <option hidden value="">Select Permission</option>
                             @foreach ($permission as $row)
                                 @if (!in_array($row->name, $rolePermissions))
-                                    <option value="{{ $row->id }}">{{ $row->name }}</option>
+                                    <option value="{{ $row->id }}">{{ $row->description }}</option>
                                 @else
                                     <option value="{{ $row->id }}" selected>{{ $row->name }}</option>
                                 @endif

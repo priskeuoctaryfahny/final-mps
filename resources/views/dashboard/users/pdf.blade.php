@@ -3,46 +3,35 @@
 
 <head>
     <title>{{ $title }}</title>
-    <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th,
-        td {
-            border: 1px solid black;
-            padding: 8px;
-            text-align: left;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ public_path('backend\bootstrap4\css\bootstrap.min.css') }}">
 </head>
 
 <body>
-    <h2>{{ $title }}</h2>
-    <table>
+    <h2 class="text-center">{{ $title }}</h2>
+    <p class="text-center">{{ $dateFilter }}</p>
+    <small>
+        {{ $paperSize }} ({{ $orientation }})
+    </small>
+    <table class="table table-bordered table-striped">
         <thead>
-            <tr>
+            <tr class="text-center align-middle">
                 <th>No</th>
-                @if (in_array('name', $selectedColumns))
-                    <th>{{ $columnLabels['name'] }}</th>
-                @endif
-                @if (in_array('email', $selectedColumns))
-                    <th>{{ $columnLabels['email'] }}</th>
-                @endif
+                @foreach ($columns as $column)
+                    @if (in_array($column, $selectedColumns))
+                        <th>{{ $columnLabels[$column] }}</th>
+                    @endif
+                @endforeach
             </tr>
         </thead>
         <tbody>
-            @foreach ($users as $index => $user)
+            @foreach ($exportData as $index => $data)
                 <tr>
-                    <td>{{ $index + 1 }}</td>
-                    @if (in_array('name', $selectedColumns))
-                        <td>{{ $user->name }}</td>
-                        <!-- Pastikan ini sesuai dengan data yang ingin ditampilkan -->
-                    @endif
-                    @if (in_array('email', $selectedColumns))
-                        <td>{{ $user->email }}</td>
-                    @endif
+                    <td class="text-center">{{ $index + 1 }}</td>
+                    @foreach ($columns as $column)
+                        @if (in_array($column, $selectedColumns))
+                            <td>{{ $data->{$column} }}</td>
+                        @endif
+                    @endforeach
                 </tr>
             @endforeach
         </tbody>

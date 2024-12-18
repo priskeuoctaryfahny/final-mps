@@ -3,8 +3,9 @@
 namespace App\Exports;
 
 use App\Models\User;
-use Maatwebsite\Excel\Concerns\FromCollection;
+use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 
@@ -12,11 +13,13 @@ class UsersExport implements FromCollection, WithHeadings, ShouldAutoSize, WithC
 {
     protected $users;
     protected $selectedColumns;
+    protected $columnLabels;
 
-    public function __construct($users, $selectedColumns)
+    public function __construct($users, $selectedColumns, $columnLabels)
     {
         $this->users = $users;
         $this->selectedColumns = $selectedColumns;
+        $this->columnLabels = $columnLabels;
     }
 
     public function collection()
@@ -24,13 +27,9 @@ class UsersExport implements FromCollection, WithHeadings, ShouldAutoSize, WithC
         return $this->users->map(function ($user, $index) {
             $data = [];
             $data['No'] = $index + 1;
-            if (in_array('name', $this->selectedColumns)) {
-                $data['name'] = $user->name;
+            foreach ($this->selectedColumns as $column) {
+                $data[$column] = $user->{$column};
             }
-            if (in_array('email', $this->selectedColumns)) {
-                $data['email'] = $user->email;
-            }
-
             return $data;
         });
     }
@@ -39,11 +38,10 @@ class UsersExport implements FromCollection, WithHeadings, ShouldAutoSize, WithC
     {
         $headings = [];
         $headings[] = 'No';
-        if (in_array('name', $this->selectedColumns)) {
-            $headings[] = 'Nama Lengkap';
-        }
-        if (in_array('email', $this->selectedColumns)) {
-            $headings[] = 'Alamat Email';
+        foreach ($this->columnLabels as $column => $label) {
+            if (in_array($column, $this->selectedColumns)) {
+                $headings[] = $label;
+            }
         }
 
         return $headings;

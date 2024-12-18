@@ -15,32 +15,28 @@
                     <div class="col col-sm-6 col-lg-7 col-xl-6"><a class="d-flex flex-center text-decoration-none mb-4"
                             href="{{ asset('backend') }}/index.html">
                             <div class="d-flex align-items-center fw-bolder fs-3 d-inline-block"><img
-                                    src="{{ asset('backend') }}/assets/img/icons/logo.png" alt="phoenix"
-                                    width="58" />
+                                    src="{{ $sets->web_logo ? Storage::url($sets->web_logo) : asset('backend/assets/img/default/nope.jpg') }}"
+                                    alt="phoenix" width="58" />
                             </div>
                         </a>
                         <div class="text-center mb-7">
-                            <h3 class="text-body-highlight">Sign In</h3>
-                            <p class="text-body-tertiary">Get access to your account</p>
+                            <h3 class="text-body-highlight">Login</h3>
+                            <p class="text-body-tertiary">Masuk ke
+                                {{ $sets->web_title ? $sets->web_title : config('app.name') }}</p>
                         </div>
                         <a href="{{ route('auth.google') }}" class="btn btn-phoenix-secondary w-100 mb-3"><span
-                                class="fab fa-google text-danger me-2 fs-9"></span>Sign in with google</a>
+                                class="fab fa-google text-success me-2 fs-9"></span>Login dengan Google</a>
 
-
-                        @if (session('error'))
-                            <div class="alert alert-danger">
-                                {{ session('error') }}
-                            </div>
-                        @endif
 
 
                         <form action="{{ route('login') }}" method="post">
                             @csrf
                             <div class="mb-3 text-start">
-                                <label class="form-label" for="email">Email address</label>
+                                <label class="form-label" for="email">Alamat Email</label>
                                 <div class="form-icon-container">
                                     <input class="form-control form-icon-input" id="email" name="email"
-                                        type="email" placeholder="name@example.com" /><span
+                                        type="email" placeholder="blabla@blabla.com"
+                                        value="{{ old('email') }}" /><span
                                         class="fas fa-user text-body fs-9 form-icon"></span>
                                 </div>
                             </div>
@@ -63,17 +59,16 @@
                                     <div class="form-check mb-0">
                                         <input class="form-check-input" id="basic-checkbox" type="checkbox"
                                             checked="checked" />
-                                        <label class="form-check-label mb-0" for="basic-checkbox">Remember me</label>
+                                        <label class="form-check-label mb-0" for="basic-checkbox">Ingat saya</label>
                                     </div>
                                 </div>
                                 <div class="col-auto"><a class="fs-9 fw-semibold"
-                                        href="{{ route('password.request') }}">Forgot
-                                        Password?</a></div>
+                                        href="{{ route('password.request') }}">Lupa Password?</a></div>
                             </div>
-                            <button type="submit" class="btn btn-primary w-100 mb-3">Sign In</button>
+                            <button type="submit" class="btn btn-primary w-100 mb-3">Login</button>
                         </form>
-                        <div class="text-center"><a class="fs-9 fw-bold" href="{{ route('register') }}">Create an
-                                account</a></div>
+                        <div class="text-center"><a class="fs-9 fw-bold" href="{{ route('register') }}">Buat akun</a>
+                        </div>
                     </div>
                 </div>
             </div>

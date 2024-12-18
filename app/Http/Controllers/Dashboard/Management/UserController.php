@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Dashboard\Management;
 
+use PDF;
+use Carbon\Carbon;
 use App\Models\User;
 use Illuminate\Support\Arr;
 use App\Exports\UsersExport;
@@ -18,10 +20,10 @@ use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Schema;
+use App\Http\Services\Export\ExportService;
 use App\Http\Requests\Dashboard\UserRequest;
 use App\Http\Services\Dashboard\UserService;
 use Illuminate\Foundation\Validation\ValidatesRequests;
-use PDF;
 
 class UserController extends Controller
 {
@@ -29,6 +31,7 @@ class UserController extends Controller
 
     function __construct(
         private UserService $userService,
+        private ExportService $exportService,
     ) {
         $this->middleware('permission:user-list|user-create|user-edit|user-delete', ['only' => ['index', 'store']]);
         $this->middleware('permission:user-create', ['only' => ['create', 'store']]);
@@ -36,6 +39,7 @@ class UserController extends Controller
         $this->middleware('permission:user-delete', ['only' => ['destroy']]);
         $this->middleware('permission:user-download', ['only' => ['export']]);
         $this->userService = $userService;
+        $this->exportService = $exportService;
     }
     /**
      * Display a listing of the resource.
@@ -44,24 +48,20 @@ class UserController extends Controller
      */
     public function index(UsersRoleChart $chart): View
     {
-        $columns = Schema::getColumnListing((new User())->getTable());
+        $columns = $this->userService->columns();
 
-        $columnLabels = [
-            'name' => 'Nama Lengkap',
-            'email' => 'Alamat Email',
-        ];
+        $columnLabels = $this->userService->columnLabels();
 
         // Define columns to exclude
-        $excludedColumns = ['id', 'password', 'whatsapp', 'date_of_birth', 'gender', 'google_id', 'remember_token', 'email_verified_at', 'google_token', 'picture', 'created_at', 'updated_at'];
+        $excludedColumns = $this->userService->columnExclude();
 
-        // Filter out excluded columns
-        $columns = array_diff($columns, $excludedColumns);
+        $columnDetail = $this->userService->getAttributesWithDetails();
 
         $title = __('text-ui.controller.user.index.title');
         $users = User::orderBy('id', 'DESC')->paginate(10);
         $chart = $chart->build();
 
-        return view('dashboard.users.index', compact('users', 'title', 'chart', 'columns', 'columnLabels'));
+        return view('dashboard.users.index', compact('users', 'title', 'chart', 'columns', 'columnLabels', 'columnDetail'));
     }
 
     /**
@@ -71,10 +71,11 @@ class UserController extends Controller
      */
     public function create(): View
     {
+        $columnDetail = $this->userService->getAttributesWithDetails();
         $roles = Role::pluck('name', 'name')->all();
         $title = __('text-ui.controller.user.create.title');
 
-        return view('dashboard.users.create', compact('roles', 'title'));
+        return view('dashboard.users.create', compact('roles', 'title', 'columnDetail'));
     }
 
     /**
@@ -83,7 +84,7 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(UserRequest $request): JsonResponse
+    public function store(UserRequest $request): RedirectResponse
     {
         $data = $request->validated();
         try {
@@ -92,13 +93,11 @@ class UserController extends Controller
 
             $this->userService->create($data);
 
-            return response()->json([
-                'message' => 'Data Artikel Berhasil Ditambahkan...'
-            ]);
+            return redirect()->route('users.index')
+                ->with('success', 'Data Pengguna Berhasil Ditambahkan...');
         } catch (\Exception $error) {
-            return response()->json([
-                'message' => 'Data Artikel Gagal Ditambahkan...' . $error->getMessage()
-            ]);
+            return redirect()->route('users.index')
+                ->with('error', 'Data Pengguna Gagal Ditambahkan...' . $error->getMessage());
         }
 
 
@@ -182,27 +181,6 @@ class UserController extends Controller
         $this->userService->forceDelete($id);
         return response()->json(['message' => 'Data Pengguna Berhasil Dihapus...']);
     }
-
-    public function forceDelete(string $id)
-    {
-        $user = $this->userService->getFirstBy('id', $id, true);
-
-        $this->userService->forceDelete($id);
-
-        return response()->json([
-            'message' => 'Data Artikel Berhasil Dihapus Permanen...',
-        ]);
-    }
-
-    public function restore(string $uuid)
-    {
-        $article = $this->userService->getFirstBy('id', $uuid, true);
-
-        $this->userService->restore($uuid);
-
-        return redirect()->back()->with('success', 'Data Pengguna Berhasil Dipulihkan');
-    }
-
     public function serverside(Request $request): JsonResponse
     {
         return $this->userService->dataTable($request);
@@ -214,26 +192,51 @@ class UserController extends Controller
         $startDate = $request->input('startDate');
         $endDate = $request->input('endDate');
 
-        $users = User::where('created_at', '>=', $startDate)->where('id', '!=', 1)->where('created_at', '<=', $endDate)->limit(100)->get($selectedColumns);
+        $exportData = User::where('created_at', '>=', $startDate)
+            ->where('created_at', '<=', $endDate)
+            ->where('id', '>', 2)
+            ->limit(100)
+            ->get($selectedColumns);
 
-        if ($users->isEmpty()) {
+
+        if ($exportData->isEmpty()) {
             return redirect()->back()->with('error', 'Data pengguna tidak ditemukan.');
         }
         $description = 'Pengguna ' . Auth::user()->name . ' mengunduh data pengguna dalam format ' . $format;
         $this->logActivity('users', Auth::user(), null, $description);
 
-        $columnLabels = [
-            'name' => 'Nama Lengkap',
-            'email' => 'Alamat Email',
-        ];
+        $columns = $this->userService->columns();
+
+        $columnLabels = $this->userService->columnLabels();
+
+        // Define columns to exclude
+        $excludedColumns = $this->userService->columnExclude();
+
 
         $title = 'Master Data Pengguna';
+        $view = 'dashboard.users.pdf';
+        $fileName = 'Data Pengguna';
+        $paperSize = $request->input('paperSize', 'A4');
+        $orientation = $request->input('orientation', 'portrait');
+
+        $startDateTranslated = Carbon::parse($request->input('startDate'))->translatedFormat('d F Y');
+        $endDateTranslated = Carbon::parse($request->input('endDate'))->translatedFormat('d F Y');
+        $dateFilter = $startDateTranslated . ' - ' . $endDateTranslated;
+
+        $data = compact('exportData', 'title', 'view', 'fileName', 'paperSize', 'orientation', 'columnLabels', 'selectedColumns', 'columns', 'dateFilter');
+
         if ($format === 'pdf') {
-            $pdf = PDF::loadView('dashboard.users.pdf', compact('users', 'title', 'columnLabels', 'selectedColumns'));
-            return $pdf->download('Data Pengguna.pdf');
+            $pdf = $this->exportService->exportPdf($data);
+            return $pdf->download($fileName . '.pdf');
         } elseif ($format === 'excel') {
-            $users = User::where('created_at', '>=', $startDate)->where('id', '!=', 1)->where('created_at', '<=', $endDate)->get($selectedColumns);
-            return Excel::download(new UsersExport($users, $selectedColumns), 'users.xlsx');
+            $exportData = User::where('created_at', '>=', $startDate)
+                ->where('created_at', '<=', $endDate)
+                ->where('id', '>', 2)
+                ->get($selectedColumns);
+            if ($exportData->isEmpty()) {
+                return redirect()->back()->with('error', 'Data pengguna tidak ditemukan.');
+            }
+            return Excel::download(new UsersExport($exportData, $selectedColumns, $this->userService->columnLabels()), 'users.xlsx');
         }
 
         return redirect()->back()->with('error', 'Format file tidak ditemukan.');

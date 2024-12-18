@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="{{ app()->getLocale() }}" dir="ltr" data-navigation-type="default" data-navbar-horizontal-shape="default">
+<html lang="{{ config('app.locale', 'id') }}" dir="ltr" data-navigation-type="default"
+    data-navbar-horizontal-shape="default">
 
 <head>
     <meta charset="utf-8">
@@ -51,7 +52,6 @@
         id="user-style-rtl">
     <link href="{{ asset('backend') }}/assets/css/user.min.css" type="text/css" rel="stylesheet"
         id="user-style-default">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastr@latest/build/toastr.min.css">
     <script>
         var phoenixIsRTL = window.config.config.phoenixIsRTL;
         if (phoenixIsRTL) {

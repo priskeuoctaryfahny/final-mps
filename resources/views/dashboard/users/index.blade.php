@@ -8,19 +8,19 @@
 
 
     <div class="mb-9">
-        <div id="projectSummary">
+        <div id="{{ $title }}Data">
             <div class="row g-3 justify-content-end align-items-end mb-4">
-                <div class="col-md-12 mb-4">
-                    <div class="p-6 m-20 bg-white rounded shadow" id="chart-container">
+                <div class="card col-md-12 mb-4">
+                    <div class="p-6 m-20 bg-inherit rounded shadow" id="chart-container">
                         {!! $chart->container() !!}
                     </div>
                 </div>
             </div>
-            <div class="card shadow-none border my-4" data-component-card="data-component-card">
+            <div class="card d-print-none shadow-none border my-4" data-component-card="data-component-card">
                 <div class="card-header p-4 border-bottom bg-body">
                     <div class="row g-3 justify-content-between align-items-center">
                         <div class="col-12 col-md">
-                            <h4 class="mb-0">{{ $title }}<span
+                            <h4 class="mb-0" autofocus>{{ $title }}<span
                                     class="fw-normal text-body-tertiary ms-3"></span></h4>
                         </div>
                         <div class="col col-md-auto">
@@ -40,13 +40,14 @@
                     </div>
                 </div>
                 <div class="card-body p-4">
-                    <div class="table-responsive-sm scrollbar d-print-none">
+                    <div class="table-responsive-sm scrollbar">
                         <table class="table table-bordered table-striped" id="yajra" width="100%">
                             <thead>
                                 <tr>
                                     <th width="1%">No</th>
-                                    <th>Name</th>
-                                    <th>Email</th>
+                                    @foreach ($columnDetail as $column => $details)
+                                        <th>{{ ucwords($details['label']) }}</th>
+                                    @endforeach
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -62,7 +63,75 @@
 
     @push('footer')
         <script src="{{ asset('vendor/larapex-charts/apexcharts.js') }}"></script>
-        <script src={{ asset('backend/js/dashboard/user.js') }}></script>
+        <script>
+            let submit_method;
+
+            $(document).ready(function() {
+                userTable();
+            });
+
+            // datatable serverside
+            function userTable() {
+                $('#yajra').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    responsive: true,
+                    ajax: "/users/serverside",
+                    columns: [{
+                            data: 'DT_RowIndex',
+                            name: 'DT_RowIndex'
+                        },
+                        @foreach ($columnDetail as $column => $details)
+                            {
+                                data: '{{ $column }}',
+                                name: '{{ $column }}'
+                            },
+                        @endforeach {
+                            data: 'action',
+                            name: 'action',
+                            orderable: true,
+                            searchable: true
+                        },
+                    ]
+                });
+            };
+
+            const deleteData = (e) => {
+                let id = e.getAttribute('data-id');
+
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "Do you want to delete this article?",
+                    icon: "question",
+                    confirmButtonColor: "#d33",
+                    cancelButtonColor: "#3085d6",
+                    confirmButtonText: "Delete",
+                    cancelButtonText: "Cancel",
+                    allowOutsideClick: false,
+                    showCancelButton: true,
+                    showCloseButton: true
+                }).then((result) => {
+                    if (result.value) {
+
+                        $.ajax({
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            type: "DELETE",
+                            url: "/users/" + id,
+                            dataType: "json",
+                            success: function(response) {
+                                reloadTable();
+                                toastSuccess(response.message);
+                            },
+                            error: function(response) {
+                                console.log(response);
+                            }
+                        });
+                    }
+                })
+            }
+        </script>
         {{ $chart->script() }}
     @endpush
 </x-dash.layout>

@@ -38,14 +38,14 @@ class GoogleController extends Controller
 
                 // Log them in
                 Auth::login($finduser);
-                return redirect()->intended('dashboard')->with('success', 'You have successfully logged in.');
+                return redirect()->intended('dashboard')->with('success', 'Login berhasil');
             } else {
                 // If user does not exist, redirect with a message
-                return redirect()->route('login')->with('error', 'Your email is not registered. Please contact the operator to create a new account.');
+                return redirect()->route('login')->with('error', 'Email anda tidak terdaftar');
             }
         } catch (Exception $e) {
             // Handle exceptions (e.g., log them or show a user-friendly error)
-            return redirect()->route('login')->with('error', 'An error occurred while trying to log in. Please try again later.');
+            return redirect()->route('login')->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
 }

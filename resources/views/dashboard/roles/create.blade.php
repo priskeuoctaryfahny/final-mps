@@ -8,13 +8,28 @@
             <form class="row g-3 mb-6 needs-validation" novalidate="" method="POST" action="{{ route('roles.store') }}"
                 onsubmit="showLoader()">
                 @csrf
-                <div class="col-sm-12 col-md-12">
-                    <div class="form-floating">
-                        <input class="form-control" id="floatingInputGrid" type="text" name="name"
-                            placeholder="Name" required />
-                        <label for="floatingInputGrid">Name</label>
+                @foreach ($columnDetail as $column => $details)
+                    <div class="col-sm-12 col-md-12">
+                        @if ($details['type'] === 'string')
+                            <div class="form-floating">
+                                <input class="form-control" type="text" name="{{ $column }}"
+                                    id="{{ $column }}" placeholder="{{ $details['label'] }}"
+                                    {{ $details['required'] ? 'required' : '' }}>
+                                <label for="{{ $column }}">{{ $details['label'] }}</label>
+                            </div>
+                        @elseif ($details['type'] === 'integer')
+                            <div class="form-floating">
+                                <input class="form-control" type="number" name="{{ $column }}"
+                                    id="{{ $column }}" placeholder="{{ $details['label'] }}"
+                                    {{ $details['required'] ? 'required' : '' }}>
+                                <label for="{{ $column }}">{{ $details['label'] }}</label>
+                            </div>
+                        @elseif ($details['type'] === 'boolean')
+                            <input class="form-control" type="checkbox" name="{{ $column }}"
+                                id="{{ $column }}" value="1" {{ $details['required'] ? 'required' : '' }}>
+                        @endif
                     </div>
-                </div>
+                @endforeach
                 <div class="col-12 gy-6">
                     <div class="form-floating form-floating-advance-select">
                         <label>Add Permission</label>

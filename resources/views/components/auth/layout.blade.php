@@ -1,5 +1,7 @@
 <x-auth.header>
-    {{ $title }}
+    @slot('title')
+        {{ $title }}
+    @endslot
 </x-auth.header>
 
 {{ $slot }}

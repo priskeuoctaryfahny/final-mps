@@ -5,14 +5,14 @@ namespace App\Http\Controllers\Dashboard\Management;
 
 use Illuminate\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Schema;
-use App\Services\Dashboard\RoleService;
 use Spatie\Permission\Models\Permission;
 use App\Http\Requests\Dashboard\RoleRequest;
+use App\Http\Services\Dashboard\RoleService;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 
 class RoleController extends Controller
@@ -41,9 +41,10 @@ class RoleController extends Controller
     public function index(Request $request): View
     {
         $columnDetail = $this->roleService->getAttributesWithDetails();
+        $columns = $this->roleService->getColumns();
 
         $title = __('text-ui.controller.role.index.title');
-        $roles = Role::orderBy('id', 'DESC')->get();
+        $roles = Role::orderBy('id', 'DESC')->paginate(10);
         return view('dashboard.roles.index', compact('title', 'roles', 'columnDetail'));
     }
 
@@ -54,9 +55,10 @@ class RoleController extends Controller
      */
     public function create(): View
     {
+        $columnDetail = $this->roleService->getAttributesWithDetails();
         $title = __('text-ui.controller.role.create.title');
         $permission = Permission::get();
-        return view('dashboard.roles.create', compact('permission', 'title'));
+        return view('dashboard.roles.create', compact('permission', 'title', 'columnDetail'));
     }
 
     /**
@@ -65,13 +67,8 @@ class RoleController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request): RedirectResponse
+    public function store(RoleRequest $request): RedirectResponse
     {
-        $this->validate($request, [
-            'name' => 'required|unique:roles,name',
-            'permission' => 'required',
-        ]);
-
         $permissionsID = array_map(
             function ($value) {
                 return (int)$value;
@@ -96,6 +93,7 @@ class RoleController extends Controller
         $title = __('text-ui.controller.role.edit.title');
         $role = Role::find($id);
         $permission = Permission::get();
+        $columnDetail = $this->roleService->getAttributesWithDetails();
 
         $rolePermissions = DB::table("role_has_permissions")
             ->select('role_has_permissions.permission_id', 'permissions.name')
@@ -104,7 +102,7 @@ class RoleController extends Controller
             ->pluck('permissions.name', 'role_has_permissions.permission_id')
             ->all();
 
-        return view('dashboard.roles.edit', compact('role', 'permission', 'rolePermissions', 'title'));
+        return view('dashboard.roles.edit', compact('role', 'permission', 'rolePermissions', 'title', 'columnDetail'));
     }
 
     /**
@@ -114,13 +112,8 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id): RedirectResponse
+    public function update(RoleRequest $request, $id): RedirectResponse
     {
-        $this->validate($request, [
-            'name' => 'required',
-            'permission' => 'required',
-        ]);
-
         $role = Role::find($id);
         $role->name = $request->input('name');
         $role->save();
@@ -135,7 +128,7 @@ class RoleController extends Controller
         $role->syncPermissions($permissionsID);
 
         return redirect()->route('roles.index')
-            ->with('success', 'Role updated successfully');
+            ->with('success', 'Peran berhasil diubah');
     }
     /**
      * Remove the specified resource from storage.
@@ -143,10 +136,15 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id): RedirectResponse
+    public function destroy(string $id)
     {
-        DB::table("roles")->where('id', $id)->delete();
-        return redirect()->route('roles.index')
-            ->with('success', 'Role deleted successfully');
+        $this->roleService->forceDelete($id);
+        return response()->json(['message' => 'Data Pengguna Berhasil Dihapus...']);
+    }
+
+
+    public function serverside(Request $request): JsonResponse
+    {
+        return $this->roleService->dataTable($request);
     }
 }

@@ -8,13 +8,14 @@ class RoleRequest extends FormRequest
 {
     public function authorize()
     {
-        return auth()->user()->can('user-create');
+        return auth()->user()->can('role-create') || auth()->user()->can('role-update');
     }
 
     public function rules()
     {
         return [
             'name' => 'required|string|max:255',
+            'permission' => 'required',
         ];
     }
 }

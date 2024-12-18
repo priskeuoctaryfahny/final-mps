@@ -2,11 +2,12 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\RendisController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LanguageController;
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\WebSettingController;
 use App\Http\Controllers\Auth\GoogleController;
-use App\Http\Controllers\RendisController;
 use App\Http\Controllers\Dashboard\Management\RoleController;
 use App\Http\Controllers\Dashboard\Management\UserController;
 
@@ -17,6 +18,8 @@ Route::get('/', function () {
 Route::get('/tes', function () {
     return view('tes');
 });
+
+
 Route::get('lang', [LanguageController::class, 'change'])->name("change.lang");
 
 
@@ -42,18 +45,19 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::resource('roles', RoleController::class);
 
     // Users
-    Route::get('restore/{id}', [UserController::class, 'restore'])->name('users.restore');
-    Route::delete('users/force-delete/{id}', [UserController::class, 'forceDelete']);
     Route::get('users/export/{format}', [UserController::class, 'export'])->name('users.export');
     Route::get('users/serverside', [UserController::class, 'serverside'])->name('users.serverside');
     Route::resource('users', UserController::class);
 
     // Rendis
-    Route::delete('rendis/force-delete/{id}', [RenDisController::class, 'forceDelete']);
     Route::get('rendis/export/{format}', [RenDisController::class, 'export'])->name('rendis.export');
     Route::get('rendis/serverside', [RenDisController::class, 'serverside'])->name('rendis.serverside');
     Route::resource('rendis', RenDisController::class);
+
+    Route::get('roles/serverside', [RoleController::class, 'serverside'])->name('roles.serverside');
+    Route::resource('roles', RoleController::class);
+
+    Route::get('testing', [UserController::class, 'testing'])->name('users.testing');
 });

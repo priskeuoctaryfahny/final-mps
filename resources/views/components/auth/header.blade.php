@@ -10,18 +10,20 @@
     <!-- ===============================================-->
     <!--    Document Title-->
     <!-- ===============================================-->
-    <title>Phoenix</title>
+    <title>{{ $sets->web_title ? $sets->web_title : config('app.name') }} - {{ $title }}</title>
 
 
     <!-- ===============================================-->
     <!--    Favicons-->
     <!-- ===============================================-->
-    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('backend') }}/assets/img/favicons/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="180x180"
+        href="{{ $sets->web_favicon ? Storage::url($sets->web_favicon) : asset('backend/assets/img/default/nope.jpg') }}">
     <link rel="icon" type="image/png" sizes="32x32"
-        href="{{ asset('backend') }}/assets/img/favicons/favicon-32x32.png">
+        href="{{ $sets->web_favicon ? Storage::url($sets->web_favicon) : asset('backend/assets/img/default/nope.jpg') }}">
     <link rel="icon" type="image/png" sizes="16x16"
-        href="{{ asset('backend') }}/assets/img/favicons/favicon-16x16.png">
-    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('backend') }}/assets/img/favicons/favicon.ico">
+        href="{{ $sets->web_favicon ? Storage::url($sets->web_favicon) : asset('backend/assets/img/default/nope.jpg') }}">
+    <link rel="shortcut icon" type="image/x-icon"
+        href="{{ $sets->web_favicon ? Storage::url($sets->web_favicon) : asset('backend/assets/img/default/nope.jpg') }}">
     <link rel="manifest" href="{{ asset('backend') }}/assets/img/favicons/manifest.json">
     <meta name="msapplication-TileImage" content="{{ asset('backend') }}/assets/img/favicons/mstile-150x150.png">
     <meta name="theme-color" content="#ffffff">
@@ -44,8 +46,6 @@
         id="user-style-rtl">
     <link href="{{ asset('backend') }}/assets/css/user.min.css" type="text/css" rel="stylesheet"
         id="user-style-default">
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
-        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastr@latest/build/toastr.min.css">
     <script>
         var phoenixIsRTL = window.config.config.phoenixIsRTL;
@@ -62,7 +62,51 @@
             userLinkRTL.setAttribute('disabled', true);
         }
     </script>
+
+
+    <link rel="stylesheet" href="{{ asset('backend/css/loader.css') }}">
 </head>
 
 
 <body>
+    <div class="loading-screen" id="loading-screen">
+        <svg class="ip" viewBox="0 0 256 128" width="256px" height="128px" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="grad1" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stop-color="#5ebd3e" />
+                    <stop offset="33%" stop-color="#ffb900" />
+                    <stop offset="67%" stop-color="#f78200" />
+                    <stop offset="100%" stop-color="#e23838" />
+                </linearGradient>
+                <linearGradient id="grad2" x1="1" y1="0" x2="0" y2="0">
+                    <stop offset="0%" stop-color="#e23838" />
+                    <stop offset="33%" stop-color="#973999" />
+                    <stop offset="67%" stop-color="#009cdf" />
+                    <stop offset="100%" stop-color="#5ebd3e" />
+                </linearGradient>
+            </defs>
+            <g fill="none" stroke-linecap="round" stroke-width="16">
+                <g class="ip__track" stroke="#ddd">
+                    <path d="M8,64s0-56,60-56,60,112,120,112,60-56,60-56" />
+                    <path d="M248,64s0-56-60-56-60,112-120,112S8,64,8,64" />
+                </g>
+                <g stroke-dasharray="180 656">
+                    <path class="ip__worm1" stroke="url(#grad1)" stroke-dashoffset="0"
+                        d="M8,64s0-56,60-56,60,112,120,112,60-56,60-56" />
+                    <path class="ip__worm2" stroke="url(#grad2)" stroke-dashoffset="358"
+                        d="M248,64s0-56-60-56-60,112-120,112S8,64,8,64" />
+                </g>
+            </g>
+        </svg>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const loadingScreen = document.getElementById('loading-screen');
+
+            loadingScreen.classList.remove('hidden');
+
+            window.addEventListener('load', function() {
+                loadingScreen.classList.add('hidden');
+            });
+        });
+    </script>
