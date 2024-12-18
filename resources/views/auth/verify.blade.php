@@ -5,16 +5,12 @@
 
     <main class="main" id="top">
         <div class="row vh-100 g-0">
-            <div class="col-lg-6 position-relative d-none d-lg-block">
-                <div class="bg-holder" style="background-image:url({{ asset('backend') }}/assets/img/bg/30.png);">
-                </div>
-            </div>
-            <div class="col-lg-6">
+            <div class="col-lg-12">
                 <div class="row flex-center h-100 g-0 px-4 px-sm-0">
                     <div class="col col-sm-6 col-lg-7 col-xl-6">
                         <div class="text-center mb-7">
-                            <h3 class="text-body-highlight">Email Verification</h3>
-                            <p class="text-body-tertiary">Please verify your email address.</p>
+                            <h3 class="text-body-highlight">Verifikasi Email</h3>
+                            <p class="text-body-tertiary">Silahkan verifikasi email</p>
                         </div>
 
                         @if (session('status') == 'verification-link-sent')
@@ -23,16 +19,18 @@
                             </div>
                         @endif
 
-                        <div class="mb-4 text-sm text-gray-600">
-                            {{ __('Thanks for signing up! Before getting started, could you verify your email address by clicking on the link we just emailed to you? If you didn\'t receive the email, we will gladly send you another.') }}
+                        <div class="mb-4 text-sm text-center text-gray-600">
+                            Verifikasi email anda untuk melanjutkan ke halaman selanjutnya, Link verifikasi email akan
+                            dikirimkan ke email anda.
                         </div>
 
                         <div class="text-center">
-                            <form method="POST" action="{{ route('verification.send') }}">
+                            <form class="needs-validation" method="POST" action="{{ route('verification.send') }}"
+                                novalidate onsubmit="showLoader()">
                                 @csrf
                                 <div>
                                     <x-primary-button>
-                                        {{ __('Resend Verification Email') }}
+                                        {{ __('Kirim Link Verifikasi') }}
                                     </x-primary-button>
                                 </div>
                             </form>
@@ -40,7 +38,7 @@
                             <form class="my-2" method="POST" action="{{ route('logout') }}">
                                 @csrf
                                 <button type="submit" class="btn btn-outline-secondary">
-                                    {{ __('Log Out') }}
+                                    {{ __('Keluar') }}
                                 </button>
                             </form>
                         </div>

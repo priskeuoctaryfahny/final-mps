@@ -22,6 +22,16 @@
             transition: opacity var(--trans-dur);
         }
 
+        .loading-screen.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loading-screen.fade-in {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
         .loading-screen.hidden {
             opacity: 0;
             pointer-events: none;

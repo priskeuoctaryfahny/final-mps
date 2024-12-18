@@ -29,7 +29,8 @@
 
 
 
-                        <form action="{{ route('login') }}" method="post">
+                        <form class="needs-validation" action="{{ route('login') }}" method="post"
+                            onsubmit="showLoader()" novalidate="">
                             @csrf
                             <div class="mb-3 text-start">
                                 <label class="form-label" for="email">Alamat Email</label>

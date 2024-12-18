@@ -145,25 +145,75 @@
 <script src={{ asset('backend/js/helper.js') }}></script>
 
 <script>
-    @if ($errors->any())
-        @foreach ($errors->all() as $error)
-            toastErrorOri("{{ $error }}");
-        @endforeach
-    @endif
-    @if (session('success'))
-        toastSuccess("{{ session('success') }}");
-    @endif
-    @if (session('info'))
-        toastInfo("{{ session('info') }}");
-    @endif
+    const loadingScreen = document.getElementById('loading-screen');
 
-    @if (session('warning'))
-        toastWarning("{{ session('warning') }}");
-    @endif
+    function showLoader() {
+        event.preventDefault();
+        event.stopPropagation();
+        // Get the form element
+        const form = document.querySelector('.needs-validation');
 
-    @if (session('error'))
-        toastErrorOri("{{ session('error') }}");
-    @endif
+        // Check if the form is valid
+        if (form.checkValidity() === false) {
+            // If there are errors, prevent the default form submission
+            event.preventDefault();
+            event.stopPropagation();
+
+            // Trigger the browser's default validation UI
+            form.classList.add('was-validated');
+        } else {
+            // If the form is valid, show the loader
+            loadingScreen.classList.remove('hidden');
+            setTimeout(() => {
+                loadingScreen.classList.add('fade-in');
+            }, 50);
+
+            // Submit the form
+            form.submit();
+        }
+    }
+
+    document.onreadystatechange = function() {
+        if (document.readyState === "complete") {
+            loadingScreen.classList.add('fade-out');
+            setTimeout(() => {
+                loadingScreen.classList.add('hidden');
+                document.querySelector("body").style.visibility = "visible";
+            }, 500); // Match this duration with the CSS transition duration
+
+            @if ($errors->any())
+                @foreach ($errors->all() as $error)
+                    toastErrorOri("{{ $error }}");
+                @endforeach
+            @endif
+
+            @if (session('success'))
+                toastSuccess("{{ session('success') }}");
+            @endif
+            @if (session('info'))
+                toastInfo("{{ session('info') }}");
+            @endif
+
+            @if (session('warning'))
+                toastWarning("{{ session('warning') }}");
+            @endif
+
+            @if (session('error'))
+                toastErrorOri("{{ session('error') }}");
+            @endif
+
+            @if (session('status'))
+                toastSuccess("{{ session('status') }}");
+            @endif
+        }
+    };
+
+    function hideLoader() {
+        loadingScreen.classList.add('fade-out');
+        setTimeout(() => {
+            loadingScreen.classList.add('hidden');;
+        }, 500); // Match this duration with the CSS transition duration
+    }
 </script>
 
 </body>

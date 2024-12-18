@@ -8,6 +8,8 @@ use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\WebSettingController;
 use App\Http\Controllers\Auth\GoogleController;
+use App\Http\Controllers\Auth\VerificationController;
+use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Dashboard\Management\RoleController;
 use App\Http\Controllers\Dashboard\Management\UserController;
 
@@ -22,9 +24,19 @@ Route::get('/tes', function () {
 
 Route::get('lang', [LanguageController::class, 'change'])->name("change.lang");
 
+Route::get('/email/verify', [VerificationController::class, 'show'])
+    ->middleware(['auth'])
+    ->name('verification.notice');
 
+Route::get('/email/verify/{id}/{hash}', [VerificationController::class, 'verify'])
+    ->middleware(['auth', 'signed'])
+    ->name('verification.verify');
 
-Auth::routes(['verify' => true]);
+Route::post('/email/verification-notification', [VerificationController::class, 'send'])
+    ->middleware(['auth'])
+    ->name('verification.send');
+
+Auth::routes();
 
 Route::controller(GoogleController::class)->group(function () {
     Route::get('auth/google', 'redirectToGoogle')->name('auth.google');
@@ -35,17 +47,13 @@ Route::get('/dashboard', function () {
     return view('dashboard.index')->with('title', __('text-ui.breadcrumb.dashboard'));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/dashboard2', function () {
-    return view('dashboard.index')->with('title', 'Dashboard 2');
-})->middleware(['auth', 'verified'])->name('dashboard2');
+// Route::middleware('auth')->group(function () {
+//     Route::get('password/reset', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
+// });
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('profiles', ProfileController::class);
     Route::resource('settings', WebSettingController::class);
-});
-
-Route::middleware('auth')->group(function () {
-
     // Users
     Route::get('users/export/{format}', [UserController::class, 'export'])->name('users.export');
     Route::get('users/serverside', [UserController::class, 'serverside'])->name('users.serverside');

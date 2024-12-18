@@ -63,8 +63,8 @@
             <h5 class="setting-panel-item-title">Vertical Navbar Appearance</h5>
             <div class="row gx-2">
                 <div class="col-6">
-                    <input class="btn-check" id="navbar-style-default" type="radio" name="config.name"
-                        value="default" data-theme-control="phoenixNavbarVerticalStyle" />
+                    <input class="btn-check" id="navbar-style-default" type="radio" name="config.name" value="default"
+                        data-theme-control="phoenixNavbarVerticalStyle" />
                     <label class="btn d-block w-100 btn-navbar-style fs-9" for="navbar-style-default"> <img
                             class="img-fluid img-prototype d-dark-none"
                             src="{{ asset('backend') }}/assets/img/generic/default-light.png" alt="" /><img
@@ -74,8 +74,8 @@
                             class="label-text d-light-none">Default</span></label>
                 </div>
                 <div class="col-6">
-                    <input class="btn-check" id="navbar-style-dark" type="radio" name="config.name"
-                        value="darker" data-theme-control="phoenixNavbarVerticalStyle" />
+                    <input class="btn-check" id="navbar-style-dark" type="radio" name="config.name" value="darker"
+                        data-theme-control="phoenixNavbarVerticalStyle" />
                     <label class="btn d-block w-100 btn-navbar-style fs-9" for="navbar-style-dark"> <img
                             class="img-fluid img-prototype d-dark-none"
                             src="{{ asset('backend') }}/assets/img/generic/vertical-darker.png" alt="" /><img
@@ -152,26 +152,75 @@
 @stack('chart')
 
 <script>
-    @if ($errors->any())
-        @foreach ($errors->all() as $error)
-        toastErrorOri("{{ $error }}");
-        @endforeach
-    @endif
+    const loadingScreen = document.getElementById('loading-screen');
 
-    @if (session('success'))
-    toastSuccess("{{ session('success') }}");
-    @endif
-    @if (session('info'))
-        toastInfo("{{ session('info') }}");
-    @endif
+    function showLoader() {
+        event.preventDefault();
+        event.stopPropagation();
+        // Get the form element
+        const form = document.querySelector('.needs-validation');
 
-    @if (session('warning'))
-    toastWarning("{{ session('warning') }}");
-    @endif
+        // Check if the form is valid
+        if (form.checkValidity() === false) {
+            // If there are errors, prevent the default form submission
+            event.preventDefault();
+            event.stopPropagation();
 
-    @if (session('error'))
-    toastErrorOri("{{ session('error') }}");
-    @endif
+            // Trigger the browser's default validation UI
+            form.classList.add('was-validated');
+        } else {
+            // If the form is valid, show the loader
+            loadingScreen.classList.remove('hidden');
+            setTimeout(() => {
+                loadingScreen.classList.add('fade-in');
+            }, 50);
+
+            // Submit the form
+            form.submit();
+        }
+    }
+
+    document.onreadystatechange = function() {
+        if (document.readyState === "complete") {
+            loadingScreen.classList.add('fade-out');
+            setTimeout(() => {
+                loadingScreen.classList.add('hidden');
+                document.querySelector("body").style.visibility = "visible";
+            }, 500); // Match this duration with the CSS transition duration
+
+            @if ($errors->any())
+                @foreach ($errors->all() as $error)
+                    toastErrorOri("{{ $error }}");
+                @endforeach
+            @endif
+
+            @if (session('success'))
+                toastSuccess("{{ session('success') }}");
+            @endif
+            @if (session('info'))
+                toastInfo("{{ session('info') }}");
+            @endif
+
+            @if (session('warning'))
+                toastWarning("{{ session('warning') }}");
+            @endif
+
+            @if (session('error'))
+                toastErrorOri("{{ session('error') }}");
+            @endif
+
+            @if (session('status'))
+                toastSuccess("{{ session('status') }}");
+            @endif
+        }
+    };
+
+    function hideLoader() {
+        loadingScreen.classList.add('fade-out');
+        setTimeout(() => {
+            loadingScreen.classList.add('hidden');;
+        }, 500); // Match this duration with the CSS transition duration
+    }
 </script>
 
 </body>

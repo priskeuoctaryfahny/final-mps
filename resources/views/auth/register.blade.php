@@ -37,7 +37,8 @@
                             @endforeach
                         @endif
 
-                        <form method="POST" action="{{ route('register') }}">
+                        <form class="needs-validation" method="POST" action="{{ route('register') }}"
+                            onsubmit="showLoader()" novalidate>
                             @csrf
                             <div class="mb-3 text-start">
                                 <label class="form-label" for="name">Nama Lengkap</label>
