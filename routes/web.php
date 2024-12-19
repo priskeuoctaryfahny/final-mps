@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\RendisController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\DashboardController;
@@ -71,10 +70,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('users/serverside', [UserController::class, 'serverside'])->name('users.serverside');
     Route::resource('users', UserController::class);
 
-    // Rendis
-    Route::get('rendis/export/{format}', [RenDisController::class, 'export'])->name('rendis.export');
-    Route::get('rendis/serverside', [RenDisController::class, 'serverside'])->name('rendis.serverside');
-    Route::resource('rendis', RenDisController::class);
 
     Route::get('roles/serverside', [RoleController::class, 'serverside'])->name('roles.serverside');
     Route::resource('roles', RoleController::class);
