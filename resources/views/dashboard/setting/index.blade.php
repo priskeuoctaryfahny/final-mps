@@ -9,8 +9,8 @@
         </div>
     </div>
     <div class="mb-5" style="page-break-before: always">
-        <form class="row gx-3 gy-4 mb-5" method="POST" enctype="multipart/form-data"
-            action="{{ route('settings.update', $setting->id) }}" onsubmit="showLoader()">
+        <form class="row gx-3 gy-4 mb-5 needs-validation" method="POST" enctype="multipart/form-data"
+            action="{{ route('settings.update', $setting->id) }}" onsubmit="showLoader()" novalidate>
             @csrf
             @method('PUT')
             <div class="col-12 col-lg-6">
