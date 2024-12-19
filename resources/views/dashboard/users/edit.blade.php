@@ -2,7 +2,7 @@
     @slot('title')
         {{ $title }}
     @endslot
-    <h2 class="mb-4">Edit user</h2>
+    <h2 class="mb-4">{{ $title }}</h2>
     <div class="row">
         <div class="col-xl-9">
             <form class="row g-3 mb-6 needs-validation" novalidate="" method="POST"
@@ -27,8 +27,9 @@
                     <div class="form-floating form-floating-advance-select">
                         <label>Role Access</label>
                         <select class="form-select" id="roles" required name="roles">
-                            <option hidden value="{{ $user->roles->first()->name }}">
-                                {{ $user->roles->first()->name }}
+                            <option hidden
+                                value="{{ $user->roles->first() != null ? $user->roles->first()->name : '' }}">
+                                {{ $user->roles->first() != null ? $user->roles->first()->name : 'Pilih Peran' }}
                             </option>
                             @foreach ($roles as $value => $label)
                                 <option value="{{ $value }}">

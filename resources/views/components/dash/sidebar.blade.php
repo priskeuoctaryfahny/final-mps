@@ -37,22 +37,55 @@
                         </div>
                     @endcanany
 
-                    <div class="nav-item-wrapper">
-                        <a class="nav-link {{ request()->routeIs('users.*') ? 'active' : '' }} label-1"
-                            href="{{ route('users.index') }}" role="button" data-bs-toggle="" aria-expanded="false">
-                            <div class="d-flex align-items-center">
-                                <span class="nav-link-icon">
-                                    <span data-feather="compass"></span>
-                                </span>
-                                <span class="nav-link-text-wrapper">
-                                    <span class="nav-link-text">{{ __('text-ui.sidebar.user') }}</span>
-                                </span>
-                            </div>
-                        </a>
-                    </div>
 
 
                 </li>
+
+
+
+                @canany(['user-list', 'user-create', 'user-edit', 'user-delete', 'activity-list', 'activity-download'])
+                    <div class="nav-item-wrapper">
+                        <a class="nav-link dropdown-indicator label-1 {{ request()->routeIs('users.*') || request()->routeIs('activities.*') ? '' : 'collapsed' }}"
+                            href="#nv-user" role="button" data-bs-toggle="collapse"
+                            aria-expanded="{{ request()->routeIs('users.*') || request()->routeIs('activities.*') ? 'true' : 'false' }}"
+                            aria-controls="nv-user">
+                            <div class="d-flex align-items-center">
+                                <div class="dropdown-indicator-icon-wrapper"><span
+                                        class="fas fa-caret-right dropdown-indicator-icon"></span></div><span
+                                    class="nav-link-icon"><span data-feather="users"></span></span><span
+                                    class="nav-link-text">{{ __('text-ui.sidebar.user') }}</span>
+                            </div>
+                        </a>
+                        <div class="parent-wrapper label-1">
+                            <ul class="nav collapse parent {{ request()->routeIs('users.*') || request()->routeIs('activities.*') ? 'show' : '' }}"
+                                data-bs-parent="#navbarVerticalCollapse" id="nv-user">
+                                <li class="collapsed-nav-item-title d-none">{{ __('text-ui.sidebar.user') }}
+                                </li>
+                                <li class="nav-item"><a
+                                        class="nav-link {{ request()->routeIs('users.index') ? 'active' : '' }}"
+                                        href="{{ route('users.index') }}">
+                                        <div class="d-flex align-items-center"><span class="nav-link-text">
+                                                Data Pengguna
+                                            </span>
+                                        </div>
+                                    </a>
+                                </li>
+                                @can('activity-list')
+                                    <li class="nav-item">
+                                        <a class="nav-link {{ request()->routeIs('activities.index') ? 'active' : '' }}"
+                                            href="{{ route('activities.index') }}">
+                                            <div class="d-flex align-items-center">
+                                                <span class="nav-link-text">
+                                                    Histori Pengguna
+                                                </span>
+                                            </div>
+                                        </a>
+                                    </li>
+                                @endcan
+                            </ul>
+                        </div>
+                    </div>
+                @endcan
 
 
             </ul>

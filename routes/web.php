@@ -5,11 +5,13 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RendisController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LanguageController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\WebSettingController;
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\Dashboard\Management\ActivityController;
 use App\Http\Controllers\Dashboard\Management\RoleController;
 use App\Http\Controllers\Dashboard\Management\UserController;
 
@@ -43,9 +45,7 @@ Route::controller(GoogleController::class)->group(function () {
     Route::get('auth/google/callback', 'handleGoogleCallback');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard.index')->with('title', __('text-ui.breadcrumb.dashboard'));
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
 // Route::middleware('auth')->group(function () {
 //     Route::get('password/reset', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
@@ -54,7 +54,19 @@ Route::get('/dashboard', function () {
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('profiles', ProfileController::class);
     Route::resource('settings', WebSettingController::class);
+
     // Users
+    Route::get('users/export/{format}', [UserController::class, 'export'])->name('users.export');
+    Route::get('users/serverside', [UserController::class, 'serverside'])->name('users.serverside');
+    Route::resource('users', UserController::class);
+
+    // Users
+    Route::get('activities/export/{format}', [ActivityController::class, 'export'])->name('activities.export');
+    Route::get('activities/serverside', [ActivityController::class, 'serverside'])->name('activities.serverside');
+    Route::get('activities', [ActivityController::class, 'index'])->name('activities.index');
+
+    // Users
+    Route::post('users/import', [UserController::class, 'import'])->name('users.import');
     Route::get('users/export/{format}', [UserController::class, 'export'])->name('users.export');
     Route::get('users/serverside', [UserController::class, 'serverside'])->name('users.serverside');
     Route::resource('users', UserController::class);

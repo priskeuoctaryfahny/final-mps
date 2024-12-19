@@ -3,35 +3,34 @@
 namespace App\Http\Services\Dashboard;
 
 use Exception;
-use App\Models\User;
-use Spatie\Permission\Models\Role;
+use Carbon\Carbon;
+use App\Models\Activity;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 
-class UserService
+class ActivityService
 {
-    protected $tableName = 'users';
+    protected $tableName = 'activities';
     public function dataTable($request)
     {
         if ($request->ajax()) {
             try {
-                $totalData = User::count();
+                $totalData = Activity::count();
                 $totalFiltered = $totalData;
 
                 $limit = $request->length;
                 $start = $request->start;
 
                 if (empty($request->search['value'])) {
-                    $data = User::latest()
-                        ->with('role:id,name')
+                    $data = Activity::latest()
+                        ->with('user:id,name,email')
                         ->skip($start)
                         ->take($limit)
                         ->get(array_merge(['id'], $this->columns()));
                 } else {
-                    $data = User::filter($request->search['value'])
+                    $data = Activity::filter($request->search['value'])
                         ->latest()
-                        ->with('role:id,name')
+                        ->with('user:id,name,email')
                         ->skip($start)
                         ->take($limit)
                         ->get(array_merge(['id'], $this->columns()));
@@ -42,29 +41,16 @@ class UserService
                 return DataTables::of($data)
                     ->addIndexColumn()
                     ->setOffset($start)
-
-                    ->addColumn('action', function ($data) {
-                        $actionBtn = '
-                    <div class="text-center" width="10%">
-                        <div class="btn-group mx-1">
-                            <a href="' . route('users.show', $data->id) . '"  class="btn btn-sm btn-secondary">
-                                <i class="fas fa-eye"></i>
-                            </a>
-
-                            <a href="' . route('users.edit', $data->id) . '"  class="btn btn-sm btn-success">
-                                <i class="fas fa-edit"></i>
-                            </a>
-
-                            <button type="button" class="btn btn-sm btn-danger" onclick="deleteData(this)" data-id="' . $data->id . '">
-                                <i class="fas fa-trash-alt"></i>
-                            </button>
-                        </div>
-                    </div>
-                ';
-
-                        return $actionBtn;
+                    ->editColumn('user_id', function ($data) {
+                        return '<div>
+                            <span class="badge bg-primary">' . $data->user->email . '</span>
+                        </div>';
+                    })->editColumn('created_at', function ($data) {
+                        return '<div class="mx-1">
+                            <span class="badge bg-info">' . Carbon::parse($data->created_at)->translatedFormat('d F Y H:i:s') . ' WIB</span>
+                        </div>';
                     })
-                    ->rawColumns(array_merge($this->columns(), ['action']))
+                    ->rawColumns($this->columns())
                     ->with([
                         'recordsTotal' => $totalData,
                         'recordsFiltered' => $totalFiltered,
@@ -77,84 +63,43 @@ class UserService
         }
     }
 
-    public function getRole()
-    {
-        return Role::latest()->get(['id', 'name']);
-    }
-
     public function getFirstBy(string $column, string $value, bool $relation = false)
     {
-        return User::where($column, $value)->firstOrFail();
+        return Activity::where($column, $value)->firstOrFail();
     }
 
-    public function create(array $data)
-    {
-        $user = User::create($data);
-        $user->assignRole($data['roles']);
-
-        return $user;
-    }
-
-    public function update(array $data, string $id)
-    {
-        $user = User::where('id', $id)->firstOrFail();
-        $user->update($data);
-        $user->assignRole($data['roles']);
-
-        return $user;
-    }
-
-    public function delete(string $id)
-    {
-        $getUser = $this->getFirstBy('id', $id);
-        $getUser->delete(); // soft delete
-
-        return $getUser;
-    }
-
-    public function forceDelete(string $id)
-    {
-        $getUser = $this->getFirstBy('id', $id);
-        Storage::disk('public')->delete('images/' . $getUser->image);
-        $getUser->forceDelete();
-
-        return $getUser;
-    }
 
     public function columnLabels()
     {
         return [
-            'name' => 'Nama Lengkap',
-            'email' => 'Alamat Email',
-            'gender' => 'Jenis Kelamin',
-            'whatsapp' => 'No Whatsapp',
-            'date_of_birth' => 'Tanggal Lahir',
-            'password' => 'Password',
+            'user_id' => 'Pengguna',
+            'title' => 'Jenis Tindakan',
+            'description' => 'Deskripsi',
+            'ip_address' => 'Alamat IP',
+            'created_at' => 'Tanggal Aktivitas',
         ];
     }
 
     public function columnExclude()
     {
-        return ['id', 'password', 'google_id', 'remember_token', 'email_verified_at', 'google_token', 'picture', 'created_at', 'updated_at'];
+        return ['id', 'key_id', 'user_agent', 'updated_at'];
+    }
+
+    public function columns()
+    {
+        return array_diff(Schema::getColumnListing((new Activity())->getTable()), $this->columnExclude());
     }
 
     public function columnTypes()
     {
         return [
-            'name' => 'string',
-            'email' => 'email',
-            'gender' => 'option',
-            'whatsapp' => 'string',
-            'date_of_birth' => 'date',
-            'password' => 'password',
+            'user_id' => 'string',
+            'title' => 'string',
+            'description' => 'string',
+            'ip_address' => 'string',
+            'created_at' => 'date',
         ];
     }
-
-    public function columns()
-    {
-        return array_diff(Schema::getColumnListing((new User())->getTable()), $this->columnExclude());
-    }
-
 
     public function getAttributesWithDetails()
     {

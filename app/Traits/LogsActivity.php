@@ -12,7 +12,7 @@ trait LogsActivity
         Activity::create([
             'user_id' => $user->id,
             'key_id' => $key_id,
-            'action' => $action,
+            'title' => $action,
             'description' => $description,
             'ip_address' => Request::ip(),
             'user_agent' => Request::userAgent(),

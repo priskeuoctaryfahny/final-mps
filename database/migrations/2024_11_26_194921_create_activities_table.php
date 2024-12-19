@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id'); // If activity can be related to a user
             $table->unsignedBigInteger('key_id')->nullable();
-            $table->string('action'); // Action taken
+            $table->string('title'); // Action taken
             $table->string('description'); // Description of the activity
             $table->string('ip_address')->nullable();
             $table->string('user_agent')->nullable();

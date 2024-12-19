@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\RedirectResponse;
+use App\Imports\Dashboard\UsersImport;
 use Illuminate\Support\Facades\Schema;
 use App\Http\Services\Export\ExportService;
 use App\Http\Requests\Dashboard\UserRequest;
@@ -240,5 +241,18 @@ class UserController extends Controller
         }
 
         return redirect()->back()->with('error', 'Format file tidak ditemukan.');
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'importFile' => 'required|mimes:xls,xlsx,csv',
+        ]);
+        try {
+            Excel::import(new UsersImport, $request->file('importFile'));
+            return redirect()->back()->with('success', 'Impor data pengguna berhasil');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Gagal mengimpor data: ' . $e->getMessage());
+        }
     }
 }

@@ -33,7 +33,9 @@ class DatabaseSeeder extends Seeder
             ['name' => 'renstra-create', 'description' => 'Menambah data Renstra Kadis'],
             ['name' => 'renstra-edit', 'description' => 'Mengubah data Renstra Kadis'],
             ['name' => 'renstra-delete', 'description' => 'Menghapus data Renstra Kadis'],
-            ['name' => 'renstra-download', 'description' => 'Mengunduh data Renstra Kadis']
+            ['name' => 'renstra-download', 'description' => 'Mengunduh data Renstra Kadis'],
+            ['name' => 'activity-list', 'description' => 'Melihat data Aktivitas Pengguna'],
+            ['name' => 'activity-download', 'description' => 'Mengunduh data Aktivitas Pengguna'],
         ];
 
         foreach ($permissions as $permission) {

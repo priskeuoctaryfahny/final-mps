@@ -26,13 +26,7 @@
                         <div class="col col-md-auto">
                             <nav class="nav justify-content-end doc-tab-nav align-items-center" role="tablist">
 
-                                @can('user-create')
-                                    <a class="btn btn-sm btn-primary" href="{{ route('users.create') }}">
-                                        <i class="fa-solid fa-plus me-2"></i>Tambah
-                                    </a>
-                                @endcan
                                 @can('user-download')
-                                    <x-dash.import-button />
                                     <x-dash.export-button />
                                     <x-dash.export-modal :columns="json_encode($columns)" :columnLabels="json_encode($columnLabels)" />
                                 @endcan
@@ -44,12 +38,11 @@
                     <div class="table-responsive-sm scrollbar">
                         <table class="table table-bordered table-striped" id="yajra" width="100%">
                             <thead>
-                                <tr>
+                                <tr class="text-center align-middle">
                                     <th width="1%">No</th>
                                     @foreach ($columnDetail as $column => $details)
-                                        <th>{{ ucwords($details['label']) }}</th>
+                                        <th class="text-center">{{ ucwords($details['label']) }}</th>
                                     @endforeach
-                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -68,70 +61,31 @@
             let submit_method;
 
             $(document).ready(function() {
-                userTable();
+                activityTable();
             });
 
             // datatable serverside
-            function userTable() {
+            function activityTable() {
                 $('#yajra').DataTable({
                     processing: true,
                     serverSide: true,
                     responsive: true,
-                    ajax: "/users/serverside",
+                    ajax: "/activities/serverside",
                     columns: [{
                             data: 'DT_RowIndex',
-                            name: 'DT_RowIndex'
+                            name: 'DT_RowIndex',
+                            orderable: true,
+                            searchable: true
                         },
                         @foreach ($columnDetail as $column => $details)
                             {
                                 data: '{{ $column }}',
                                 name: '{{ $column }}'
                             },
-                        @endforeach {
-                            data: 'action',
-                            name: 'action',
-                            orderable: true,
-                            searchable: true
-                        },
+                        @endforeach
                     ]
                 });
             };
-
-            const deleteData = (e) => {
-                let id = e.getAttribute('data-id');
-
-                Swal.fire({
-                    title: "Are you sure?",
-                    text: "Do you want to delete this article?",
-                    icon: "question",
-                    confirmButtonColor: "#d33",
-                    cancelButtonColor: "#3085d6",
-                    confirmButtonText: "Delete",
-                    cancelButtonText: "Cancel",
-                    allowOutsideClick: false,
-                    showCancelButton: true,
-                    showCloseButton: true
-                }).then((result) => {
-                    if (result.value) {
-
-                        $.ajax({
-                            headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                            },
-                            type: "DELETE",
-                            url: "/users/" + id,
-                            dataType: "json",
-                            success: function(response) {
-                                reloadTable();
-                                toastSuccess(response.message);
-                            },
-                            error: function(response) {
-                                console.log(response);
-                            }
-                        });
-                    }
-                })
-            }
         </script>
         {{ $chart->script() }}
     @endpush
