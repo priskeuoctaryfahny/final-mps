@@ -59,7 +59,7 @@ class UserController extends Controller
         $columnDetail = $this->userService->getAttributesWithDetails();
 
         $title = __('text-ui.controller.user.index.title');
-        $users = User::orderBy('id', 'DESC')->paginate(10);
+        $users = User::all();
         $chart = $chart->build();
 
         return view('dashboard.users.index', compact('users', 'title', 'chart', 'columns', 'columnLabels', 'columnDetail'));

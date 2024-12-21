@@ -44,12 +44,12 @@
                     <div class="table-responsive-sm scrollbar">
                         <table class="table table-bordered table-striped" id="yajra" width="100%">
                             <thead>
-                                <tr>
+                                <tr class="text-center align-middle">
                                     <th width="1%">No</th>
                                     @foreach ($columnDetail as $column => $details)
-                                        <th>{{ ucwords($details['label']) }}</th>
+                                        <th class="text-center">{{ ucwords($details['label']) }}</th>
                                     @endforeach
-                                    <th>Action</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -68,11 +68,11 @@
             let submit_method;
 
             $(document).ready(function() {
-                userTable();
+                tableYajra();
             });
 
             // datatable serverside
-            function userTable() {
+            function tableYajra() {
                 $('#yajra').DataTable({
                     processing: true,
                     serverSide: true,
@@ -80,7 +80,9 @@
                     ajax: "/users/serverside",
                     columns: [{
                             data: 'DT_RowIndex',
-                            name: 'DT_RowIndex'
+                            name: 'DT_RowIndex',
+                            orderable: true,
+                            searchable: true
                         },
                         @foreach ($columnDetail as $column => $details)
                             {
@@ -90,9 +92,7 @@
                         @endforeach {
                             data: 'action',
                             name: 'action',
-                            orderable: true,
-                            searchable: true
-                        },
+                        }
                     ]
                 });
             };
@@ -101,8 +101,8 @@
                 let id = e.getAttribute('data-id');
 
                 Swal.fire({
-                    title: "Are you sure?",
-                    text: "Do you want to delete this article?",
+                    title: "Apakah anda yakin?",
+                    text: "Apakah anda ingin menghapus data ini?",
                     icon: "question",
                     confirmButtonColor: "#d33",
                     cancelButtonColor: "#3085d6",

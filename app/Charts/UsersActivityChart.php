@@ -17,7 +17,7 @@ class UsersActivityChart
 
     public function build()
     {
-        $users = User::all(); // Retrieve all roles as Role model instances
+        $users = User::latest()->limit(100)->get(); // Retrieve all roles as Role model instances
 
         $chart = $this->chart->barChart()
             ->setTitle('Grafik Aktivitas Pengguna')

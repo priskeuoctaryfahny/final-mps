@@ -25,6 +25,7 @@ return [
         'dashboard' => 'Dashboard',
         'user' => 'User Accounts',
         'role' => 'User Access',
+        'collapse' => 'Collapse',
     ],
 
     'navbar' => [

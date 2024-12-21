@@ -25,6 +25,7 @@ return [
         'dashboard' => 'Dasbor',
         'user' => 'Akun Pengguna',
         'role' => 'Akses Pengguna',
+        'collapse' => 'Perkecil',
     ],
 
     'navbar' => [

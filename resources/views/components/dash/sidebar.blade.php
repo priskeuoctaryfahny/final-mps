@@ -12,7 +12,7 @@
                             href="{{ route('dashboard') }}" role="button" data-bs-toggle="" aria-expanded="false">
                             <div class="d-flex align-items-center">
                                 <span class="nav-link-icon">
-                                    <span data-feather="compass"></span>
+                                    <span data-feather="grid"></span>
                                 </span>
                                 <span class="nav-link-text-wrapper">
                                     <span class="nav-link-text">{{ __('text-ui.sidebar.dashboard') }}</span>
@@ -27,7 +27,7 @@
                                 href="{{ route('roles.index') }}" role="button" data-bs-toggle="" aria-expanded="false">
                                 <div class="d-flex align-items-center">
                                     <span class="nav-link-icon">
-                                        <span data-feather="compass"></span>
+                                        <span data-feather="key"></span>
                                     </span>
                                     <span class="nav-link-text-wrapper">
                                         <span class="nav-link-text">{{ __('text-ui.sidebar.role') }}</span>
@@ -81,6 +81,57 @@
                                             </div>
                                         </a>
                                     </li>
+                                @endcan
+                            </ul>
+                        </div>
+                    </div>
+                @endcan
+
+                @canany(['gas-list', 'gas-create', 'gas-edit', 'gas-delete', 'transaction-list', 'transaction-create',
+                    'transaction-edit', 'transaction-delete'])
+                    <div class="nav-item-wrapper">
+                        <a class="nav-link dropdown-indicator label-1 {{ request()->routeIs('gases.*') || request()->routeIs('transactions.*') ? '' : 'collapsed' }}"
+                            href="#nv-gases" role="button" data-bs-toggle="collapse"
+                            aria-expanded="{{ request()->routeIs('gases.*') || request()->routeIs('transactions.*') ? 'true' : 'false' }}"
+                            aria-controls="nv-gases">
+                            <div class="d-flex align-items-center">
+                                <div class="dropdown-indicator-icon-wrapper"><span
+                                        class="fas fa-caret-right dropdown-indicator-icon"></span></div><span
+                                    class="nav-link-icon"><span data-feather="users"></span></span><span
+                                    class="nav-link-text">Inventori Gas</span>
+                            </div>
+                        </a>
+                        <div class="parent-wrapper label-1">
+                            <ul class="nav collapse parent {{ request()->routeIs('gases.*') || request()->routeIs('transactions.*') ? 'show' : '' }}"
+                                data-bs-parent="#navbarVerticalCollapse" id="nv-gases">
+                                <li class="collapsed-nav-item-title d-none">
+                                    Inventori Gas
+                                </li>
+                                @can('gas-list')
+                                    <li class="nav-item">
+                                        <a class="nav-link {{ request()->routeIs('gases.index') ? 'active' : '' }}"
+                                            href="{{ route('gases.index') }}">
+                                            <div class="d-flex align-items-center"><span class="nav-link-text">
+                                                    Master Data Gas
+                                                </span>
+                                            </div>
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('transaction-list')
+                                    @foreach ($sidebarGas as $gas)
+                                        <li class="nav-item">
+                                            <a class="nav-link {{ request()->routeIs('transactions.index') ? 'active' : '' }}"
+                                                href="{{ route('transactions.index', $gas->id) }}">
+                                                <div class="d-flex align-items-center">
+                                                    <span class="nav-link-text">
+                                                        Transaksi Gas {{ $gas->name }}
+                                                    </span>
+                                                </div>
+                                            </a>
+                                        </li>
+                                    @endforeach
+
                                 @endcan
                             </ul>
                         </div>

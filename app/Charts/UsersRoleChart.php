@@ -16,7 +16,7 @@ class UsersRoleChart
 
     public function build()
     {
-        $roles = Role::all(); // Retrieve all roles as Role model instances
+        $roles = Role::latest()->limit(100)->get(); // Retrieve all roles as Role model instances
         $totalUsers = [];
 
         // Count users for each role

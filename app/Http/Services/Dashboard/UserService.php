@@ -47,14 +47,10 @@ class UserService
                         $actionBtn = '
                     <div class="text-center" width="10%">
                         <div class="btn-group mx-1">
-                            <a href="' . route('users.show', $data->id) . '"  class="btn btn-sm btn-secondary">
-                                <i class="fas fa-eye"></i>
-                            </a>
 
                             <a href="' . route('users.edit', $data->id) . '"  class="btn btn-sm btn-success">
                                 <i class="fas fa-edit"></i>
                             </a>
-
                             <button type="button" class="btn btn-sm btn-danger" onclick="deleteData(this)" data-id="' . $data->id . '">
                                 <i class="fas fa-trash-alt"></i>
                             </button>
