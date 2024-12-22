@@ -19,9 +19,5 @@ class WebSettingsServiceProvider extends ServiceProvider
             $sets = DB::table('web_settings')->first();
             View::share('sets', $sets);
         }
-        if (Schema::hasTable('gases')) {
-            $gases = Gas::all();
-            View::share('sidebarGas', $gases);
-        }
     }
 }

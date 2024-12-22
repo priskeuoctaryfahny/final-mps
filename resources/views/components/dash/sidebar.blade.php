@@ -87,51 +87,48 @@
                     </div>
                 @endcan
 
-                @canany(['gas-list', 'gas-create', 'gas-edit', 'gas-delete', 'transaction-list', 'transaction-create',
-                    'transaction-edit', 'transaction-delete'])
+                @canany(['unit-list', 'unit-create', 'unit-edit', 'unit-delete', 'unit-download', 'incident-list',
+                    'incident-create', 'incident-edit', 'incident-delete', 'incident-download'])
                     <div class="nav-item-wrapper">
-                        <a class="nav-link dropdown-indicator label-1 {{ request()->routeIs('gases.*') || request()->routeIs('transactions.*') ? '' : 'collapsed' }}"
-                            href="#nv-gases" role="button" data-bs-toggle="collapse"
-                            aria-expanded="{{ request()->routeIs('gases.*') || request()->routeIs('transactions.*') ? 'true' : 'false' }}"
-                            aria-controls="nv-gases">
+                        <a class="nav-link dropdown-indicator label-1 {{ request()->routeIs('units.*') || request()->routeIs('incidents.*') ? '' : 'collapsed' }}"
+                            href="#nv-masters" role="button" data-bs-toggle="collapse"
+                            aria-expanded="{{ request()->routeIs('units.*') || request()->routeIs('incidents.*') ? 'true' : 'false' }}"
+                            aria-controls="nv-masters">
                             <div class="d-flex align-items-center">
                                 <div class="dropdown-indicator-icon-wrapper"><span
                                         class="fas fa-caret-right dropdown-indicator-icon"></span></div><span
-                                    class="nav-link-icon"><span data-feather="users"></span></span><span
-                                    class="nav-link-text">Inventori Gas</span>
+                                    class="nav-link-icon"><span data-feather="clipboard"></span></span><span
+                                    class="nav-link-text">Master Data</span>
                             </div>
                         </a>
                         <div class="parent-wrapper label-1">
-                            <ul class="nav collapse parent {{ request()->routeIs('gases.*') || request()->routeIs('transactions.*') ? 'show' : '' }}"
-                                data-bs-parent="#navbarVerticalCollapse" id="nv-gases">
+                            <ul class="nav collapse parent {{ request()->routeIs('units.*') || request()->routeIs('incidents.*') ? 'show' : '' }}"
+                                data-bs-parent="#navbarVerticalCollapse" id="nv-masters">
                                 <li class="collapsed-nav-item-title d-none">
-                                    Inventori Gas
+                                    Master Data
                                 </li>
-                                @can('gas-list')
+                                @can('unit-list')
                                     <li class="nav-item">
-                                        <a class="nav-link {{ request()->routeIs('gases.index') ? 'active' : '' }}"
-                                            href="{{ route('gases.index') }}">
+                                        <a class="nav-link {{ request()->routeIs('units.index') ? 'active' : '' }}"
+                                            href="{{ route('units.index') }}">
                                             <div class="d-flex align-items-center"><span class="nav-link-text">
-                                                    Master Data Gas
+                                                    Data Unit
                                                 </span>
                                             </div>
                                         </a>
                                     </li>
                                 @endcan
-                                @can('transaction-list')
-                                    @foreach ($sidebarGas as $gas)
-                                        <li class="nav-item">
-                                            <a class="nav-link {{ request()->routeIs('transactions.index') ? 'active' : '' }}"
-                                                href="{{ route('transactions.index', $gas->id) }}">
-                                                <div class="d-flex align-items-center">
-                                                    <span class="nav-link-text">
-                                                        Transaksi Gas {{ $gas->name }}
-                                                    </span>
-                                                </div>
-                                            </a>
-                                        </li>
-                                    @endforeach
-
+                                @can('incident-list')
+                                    <li class="nav-item">
+                                        <a class="nav-link {{ request()->routeIs('incidents.index') ? 'active' : '' }}"
+                                            href="{{ route('incidents.index') }}">
+                                            <div class="d-flex align-items-center">
+                                                <span class="nav-link-text">
+                                                    Data Insiden
+                                                </span>
+                                            </div>
+                                        </a>
+                                    </li>
                                 @endcan
                             </ul>
                         </div>

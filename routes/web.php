@@ -6,16 +6,17 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\WebSettingController;
 use App\Http\Controllers\Auth\GoogleController;
+use App\Http\Controllers\Backend\StSpController;
+use App\Http\Controllers\Backend\UnitController;
+use App\Http\Controllers\Backend\ReportController;
+use App\Http\Controllers\Backend\EmployeeController;
+use App\Http\Controllers\Backend\IncidentController;
 use App\Http\Controllers\Auth\VerificationController;
-use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Dashboard\Management\RoleController;
 use App\Http\Controllers\Dashboard\Management\UserController;
 use App\Http\Controllers\Dashboard\Management\ActivityController;
-use App\Http\Controllers\Dashboard\Management\Inventory\GasController;
-use App\Http\Controllers\Dashboard\Management\Inventory\TransactionController;
 
 Route::get('/', function () {
     return Auth::check() ? redirect()->route('dashboard') : redirect()->route('login');
@@ -78,21 +79,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('roles', RoleController::class);
 
 
-    Route::resource('gases', GasController::class);
-
-    $routeGas = Gas::all();
-
-
-
-    Route::get('transactions/{id}', [TransactionController::class, 'index'])->name('transactions.index');
-    Route::post('transactions/import', [TransactionController::class, 'import'])->name('transactions.import');
-    Route::get('transactions/export/{format}', [TransactionController::class, 'export'])->name('transactions.export');
-    Route::get('transactions/serverside/{id}', [TransactionController::class, 'serverside'])->name('transactions.serverside');
-    Route::get('/transactions/create/{id}/in', [TransactionController::class, 'create_in'])->name('transactions.create.in');
-    Route::get('/transactions/create/{id}/out', [TransactionController::class, 'create_out'])->name('transactions.create.out');
-    Route::get('/transactions/{transaction}/edit/in', [TransactionController::class, 'edit_in'])->name('transactions.edit.in');
-    Route::get('/transactions/{transaction}/edit/out', [TransactionController::class, 'edit_out'])->name('transactions.edit.out');
-    Route::resource('transactions', TransactionController::class)->except(['index', 'create', 'show', 'edit']);
+    Route::resource('units', UnitController::class);
+    Route::resource('incidents', IncidentController::class);
+    Route::resource('reports', ReportController::class);
+    Route::resource('stsps', StSpController::class);
+    Route::resource('employees', EmployeeController::class);
 
     Route::get('testing/{tes}', function ($tes) {
         return $tes;
