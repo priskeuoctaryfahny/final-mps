@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class StSp extends Model
 {
     use HasFactory;
+    protected $table = 'st_sp';
 
     protected $fillable = ['date', 'status', 'employee_id'];
 

@@ -19,7 +19,7 @@ return new class extends Migration
 
         Schema::create('employees', function (Blueprint $table) {
             $table->id(); // ID Karyawan
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); // Foreign key constraint
+            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('cascade'); // Foreign key constraint
             $table->string('email')->unique(); // Email
             $table->string('name'); // Nama Lengkap
             $table->string('employee_identification_number')->unique(); // Nomor Induk Pegawai (NIP)

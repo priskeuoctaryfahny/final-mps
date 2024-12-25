@@ -50,9 +50,6 @@ Route::controller(GoogleController::class)->group(function () {
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
-// Route::middleware('auth')->group(function () {
-//     Route::get('password/reset', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
-// });
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('profiles', ProfileController::class);
@@ -79,10 +76,25 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('roles', RoleController::class);
 
 
+
+    Route::delete('/units/bulkDestroy', [UnitController::class, 'bulkDestroy'])->name('units.bulkDestroy');
     Route::resource('units', UnitController::class);
+
+
+    Route::delete('/incidents/bulkDestroy', [IncidentController::class, 'bulkDestroy'])->name('incidents.bulkDestroy');
     Route::resource('incidents', IncidentController::class);
+
+
+    Route::delete('/reports/bulkDestroy', [ReportController::class, 'bulkDestroy'])->name('reports.bulkDestroy');
     Route::resource('reports', ReportController::class);
+
+
+    Route::delete('/stsps/bulkDestroy', [StSpController::class, 'bulkDestroy'])->name('stsps.bulkDestroy');
     Route::resource('stsps', StSpController::class);
+
+
+    Route::delete('/employees/bulkDestroy', [EmployeeController::class, 'bulkDestroy'])->name('employees.bulkDestroy');
+    Route::put('/employees/{employee}/disconnect', [EmployeeController::class, 'disconnect'])->name('employees.disconnect');
     Route::resource('employees', EmployeeController::class);
 
     Route::get('testing/{tes}', function ($tes) {

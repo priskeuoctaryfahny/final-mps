@@ -88,7 +88,8 @@
                 @endcan
 
                 @canany(['unit-list', 'unit-create', 'unit-edit', 'unit-delete', 'unit-download', 'incident-list',
-                    'incident-create', 'incident-edit', 'incident-delete', 'incident-download'])
+                    'incident-create', 'incident-edit', 'incident-delete', 'incident-download', 'stsp-list', 'stsp-create',
+                    'stsp-edit', 'stsp-delete', 'stsp-download'])
                     <div class="nav-item-wrapper">
                         <a class="nav-link dropdown-indicator label-1 {{ request()->routeIs('units.*') || request()->routeIs('incidents.*') ? '' : 'collapsed' }}"
                             href="#nv-masters" role="button" data-bs-toggle="collapse"
@@ -130,8 +131,37 @@
                                         </a>
                                     </li>
                                 @endcan
+                                @can('stsp-list')
+                                    <li class="nav-item">
+                                        <a class="nav-link {{ request()->routeIs('stsps.index') ? 'active' : '' }}"
+                                            href="{{ route('stsps.index') }}">
+                                            <div class="d-flex align-items-center">
+                                                <span class="nav-link-text">
+                                                    Data ST/SP
+                                                </span>
+                                            </div>
+                                        </a>
+                                    </li>
+                                @endcan
+
                             </ul>
                         </div>
+                    </div>
+                @endcan
+
+                @can('employee-list')
+                    <div class="nav-item-wrapper">
+                        <a class="nav-link {{ request()->routeIs('employees.*') ? 'active' : '' }} label-1"
+                            href="{{ route('employees.index') }}" role="button" data-bs-toggle="" aria-expanded="false">
+                            <div class="d-flex align-items-center">
+                                <span class="nav-link-icon">
+                                    <span data-feather="users"></span>
+                                </span>
+                                <span class="nav-link-text-wrapper">
+                                    <span class="nav-link-text">Data Karyawan</span>
+                                </span>
+                            </div>
+                        </a>
                     </div>
                 @endcan
 

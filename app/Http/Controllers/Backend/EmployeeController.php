@@ -2,23 +2,28 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Http\Controllers\Controller;
-use App\Models\Backend\Employee;
+use App\Models\User;
 use App\Models\Backend\Unit;
 use Illuminate\Http\Request;
+use App\Models\Backend\Employee;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\RedirectResponse;
 
 class EmployeeController extends Controller
 {
     public function index()
     {
+        $title = 'Data Karyawan';
         $employees = Employee::with('unit')->get();
-        return view('backend.employees.index', compact('employees'));
+        return view('backend.employees.index', compact('employees', 'title'));
     }
 
     public function create()
     {
+        $title = 'Tambah Data Karyawan';
+        $users = User::all();
         $units = Unit::all();
-        return view('backend.employees.create', compact('units'));
+        return view('backend.employees.create', compact('units', 'title', 'users'));
     }
 
     public function store(Request $request)
@@ -46,8 +51,10 @@ class EmployeeController extends Controller
 
     public function edit(Employee $employee)
     {
+        $title = 'Edit Data Karyawan';
+        $users = User::all();
         $units = Unit::all();
-        return view('backend.employees.edit', compact('employee', 'units'));
+        return view('backend.employees.edit', compact('employee', 'units', 'title', 'users'));
     }
 
     public function update(Request $request, Employee $employee)
@@ -77,5 +84,41 @@ class EmployeeController extends Controller
     {
         $employee->delete();
         return redirect()->route('employees.index')->with('success', 'Employee deleted successfully.');
+    }
+
+    public function bulkDestroy(Request $request): RedirectResponse
+    {
+        $employeeIds = explode(',', $request->input('employeeIds', ''));
+        if (!empty($employeeIds)) {
+            $employeeNips = Employee::whereIn('id', $employeeIds)
+                ->pluck('employee_identification_number')
+                ->toArray();
+
+            foreach ($employeeIds as $employeeId) {
+                $employee = Employee::find($employeeId);
+                if ($employee) {
+                    $description = 'Pengguna ' . Auth::user()->name . ' menghapus data pegawai dengan NIP: ' . $employee->employee_identification_number;
+                    $this->logActivity('employees', Auth::user(), $employee->id, $description);
+                }
+            }
+
+            Employee::whereIn('id', $employeeIds)->delete();
+
+            return redirect()->route('employees.index')
+                ->with('success', 'Data pegawai berhasil dihapus.');
+        }
+
+        return redirect()->route('employees.index')
+            ->with('error', 'Data pegawai tidak ditemukan.');
+    }
+
+    public function disconnect($id): RedirectResponse
+    {
+        $employee = Employee::findOrFail($id);
+        $employee->user_id = null;
+        $employee->save();
+
+        return redirect()->route('employees.edit', $employee->id)
+            ->with('success', 'Koneksi akun berhasil diputuskan.');
     }
 }

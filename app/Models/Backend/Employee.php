@@ -2,6 +2,7 @@
 
 namespace App\Models\Backend;
 
+use App\Models\User;
 use App\Models\Backend\StSp;
 use App\Models\Backend\Unit;
 use App\Models\Backend\Report;
@@ -13,7 +14,21 @@ class Employee extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'department', 'unit_id'];
+    protected $fillable = [
+        'user_id',
+        'email',
+        'name',
+        'employee_identification_number',
+        'birth_place',
+        'birth_date',
+        'position_start_date',
+        'position',
+        'education_level',
+        'education_institution',
+        'major',
+        'graduation_date',
+        'unit_id',
+    ];
 
     public function unit()
     {
@@ -33,5 +48,19 @@ class Employee extends Model
     public function stSp()
     {
         return $this->hasMany(StSp::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'birth_date' => 'date',
+            'position_start_date' => 'date',
+            'graduation_date' => 'date',
+        ];
     }
 }
