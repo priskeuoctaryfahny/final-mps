@@ -11,51 +11,51 @@
                     <h2 class="mb-0">{{ $title }}</h2>
                 </div>
             </div>
-            <form method="POST" action="{{ route('incidents.bulkDestroy') }}" id="bulk-delete-form">
-                @csrf
-                @method('DELETE')
-                <div class="row g-3 justify-content-between align-items-end mb-4">
-                    <div class="col-12 col-sm-auto">
-                        <div class="d-flex align-items-center">
-                            @can('incident-create')
-                                <div class="mt-3 mx-2">
-                                    <a class="btn btn-primary btn-sm" href="{{ route('incidents.create') }}">
-                                        <i class="fa-solid fa-plus me-2"></i>Tambah
-                                    </a>
-                                </div>
-                            @endcan
-                            <div class="mt-3">
-                                <button type="submit" class="btn btn-danger btn-sm" id="delete-selected"
-                                    onclick="return confirm('Apakah anda yakin?')" disabled>
-                                    <span class="fas fa-trash me-2"></span>Hapus yang dipilih
-                                </button>
+            <div class="row g-3 justify-content-between align-items-end mb-4">
+                <div class="col-12 col-sm-auto">
+                    <div class="d-flex align-items-center">
+                        @can('incident-create')
+                            <div class="mt-3 mx-2">
+                                <a class="btn btn-primary btn-sm" href="{{ route('incidents.create') }}">
+                                    <i class="fa-solid fa-plus me-2"></i>Tambah
+                                </a>
                             </div>
+                        @endcan
+                        <div class="mt-3">
+                            <button type="submit" class="btn btn-danger btn-sm" id="delete-selected"
+                                onclick="return confirm('Apakah anda yakin?')" disabled>
+                                <span class="fas fa-trash me-2"></span>Hapus yang dipilih
+                            </button>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="table-responsive scrollbar">
-                    <table class="table fs-9 mb-0 border-top border-translucent">
-                        <thead>
-                            <tr>
-                                <th class="ps-3" style="width:2%;">
-                                    <input type="checkbox" id="select-all">
-                                </th>
-                                <th class="sort ps-3" scope="col" data-sort="id" style="width:6%;">No</th>
-                                <th class="sort white-space-nowrap ps-0" scope="col" data-sort="date">Tanggal</th>
-                                <th class="sort white-space-nowrap ps-0" scope="col" data-sort="time">Waktu</th>
-                                <th class="sort white-space-nowrap ps-0" scope="col">Lokasi</th>
-                                <th class="sort white-space-nowrap ps-0" scope="col">Deskripsi</th>
-                                <th class="sort white-space-nowrap ps-0" scope="col">Severity</th>
-                                <th class="sort white-space-nowrap ps-0" scope="col">Tipe Insiden</th>
-                                @canany(['incident-edit', 'incident-delete'])
-                                    <th class="sort text-end" scope="col"></th>
-                                @endcanany
-                            </tr>
-                        </thead>
-                        <tbody class="list" id="incident-list-table-body">
-                            @php $i = 0; @endphp
-                            @foreach ($incidents as $incident)
+            <div class="table-responsive scrollbar">
+                <table class="table fs-9 mb-0 border-top border-translucent">
+                    <thead>
+                        <tr>
+                            <th class="ps-3" style="width:2%;">
+                                <input type="checkbox" id="select-all">
+                            </th>
+                            <th class="sort ps-3" scope="col" data-sort="id" style="width:6%;">No</th>
+                            <th class="sort white-space-nowrap ps-0" scope="col" data-sort="date">Tanggal</th>
+                            <th class="sort white-space-nowrap ps-0" scope="col" data-sort="time">Waktu</th>
+                            <th class="sort white-space-nowrap ps-0" scope="col">Lokasi</th>
+                            <th class="sort white-space-nowrap ps-0" scope="col">Deskripsi</th>
+                            <th class="sort white-space-nowrap ps-0" scope="col">Severity</th>
+                            <th class="sort white-space-nowrap ps-0" scope="col">Tipe Insiden</th>
+                            @canany(['incident-edit', 'incident-delete'])
+                                <th class="sort text-end" scope="col"></th>
+                            @endcanany
+                        </tr>
+                    </thead>
+                    <tbody class="list" id="incident-list-table-body">
+                        @php $i = 0; @endphp
+                        @foreach ($incidents as $incident)
+                            <form action="{{ route('incidents.submitSesuatu', $incident->id) }}" method="POST"
+                                class="needs-validation" novalidate>
+                                @csrf
                                 <tr>
                                     <td class="text-center ps-3">
                                         <input type="checkbox" name="incidentIds[]" value="{{ $incident->id }}"
@@ -90,19 +90,24 @@
                                                             @csrf
                                                             @method('DELETE')
                                                             <button type="submit" class="dropdown-item text-danger"
-                                                                onclick="return confirm('Apakah anda yakin?')">Hapus </button>
+                                                                onclick="return confirm('Apakah anda yakin?')">Hapus
+                                                            </button>
                                                         </form>
                                                     @endcan
+                                                    <button type="submit" class="dropdown-item"
+                                                        onclick="return confirm('Apakah anda yakin?')">Tes
+                                                    </button>
                                                 </div>
                                             </div>
                                         </td>
                                     @endcanany
                                 </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            </form>
+
+                            </form>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </x-dash.layout>

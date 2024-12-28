@@ -56,6 +56,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('settings', WebSettingController::class);
 
     // Users
+    Route::put('users/liveUpdate', [UserController::class, 'liveUpdate'])->name('users.liveupdate');
     Route::get('users/export/{format}', [UserController::class, 'export'])->name('users.export');
     Route::get('users/serverside', [UserController::class, 'serverside'])->name('users.serverside');
     Route::resource('users', UserController::class);
@@ -81,6 +82,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('units', UnitController::class);
 
 
+    Route::post('/incidents/submitSesuatu/{id}', [IncidentController::class, 'submitSesuatu'])->name('incidents.submitSesuatu');
     Route::delete('/incidents/bulkDestroy', [IncidentController::class, 'bulkDestroy'])->name('incidents.bulkDestroy');
     Route::resource('incidents', IncidentController::class);
 

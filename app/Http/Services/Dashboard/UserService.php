@@ -48,9 +48,9 @@ class UserService
                     <div class="text-center" width="10%">
                         <div class="btn-group mx-1">
 
-                            <a href="' . route('users.edit', $data->id) . '"  class="btn btn-sm btn-success">
+                        <button id="btn-edit" type="button"  class="btn btn-sm btn-warning" data-id="' . $data->id . '">
                                 <i class="fas fa-edit"></i>
-                            </a>
+                            </button>
                             <button type="button" class="btn btn-sm btn-danger" onclick="deleteData(this)" data-id="' . $data->id . '">
                                 <i class="fas fa-trash-alt"></i>
                             </button>

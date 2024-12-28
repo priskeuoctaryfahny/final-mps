@@ -4,6 +4,7 @@
 
 <x-dash.sidebar />
 
+
 <x-dash.navbar>
     {{ Str::lower($title) }}
 </x-dash.navbar>

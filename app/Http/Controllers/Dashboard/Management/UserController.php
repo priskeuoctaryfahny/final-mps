@@ -151,7 +151,7 @@ class UserController extends Controller
             $input = Arr::except($input, array('password'));
         }
 
-        $user = User::find($id);
+        $user = User::findOrFail($id);
         $user->update($input);
         DB::table('model_has_roles')->where('model_id', $id)->delete();
 
@@ -159,6 +159,37 @@ class UserController extends Controller
 
         return redirect()->route('users.index')
             ->with('success', 'User updated successfully');
+    }
+
+    public function liveUpdate(Request $request)
+    {
+        try {
+            // Validate the incoming request data
+            $validatedData = $request->validate([
+                'id' => 'required|exists:users,id', // Ensure the user ID exists
+                'name' => 'required|string|max:255', // Add string and max length validation
+                'email' => 'required|email|unique:users,email,' . $request->id, // Unique validation excluding the current user
+            ]);
+
+            // Find the user by ID
+            $user = User::findOrFail($request->id); // Use findOrFail to throw a 404 if not found
+
+            $userOriginal = User::findOrFail($request->id);
+            // Update user attributes
+            $user->name = $validatedData['name'];
+            $user->email = $validatedData['email'];
+            $user->save();
+
+
+            $description = "Data pengguna " . $userOriginal->email . " telah diubah oleh " . Auth::user()->name;
+            $this->logActivity('users', Auth::user(), null, $description);
+
+            // Return a success response
+            return response()->json(['message' => 'Data Pengguna Berhasil Diubah...']);
+        } catch (\Exception $error) {
+            // Return an error response
+            return response()->json($error->getMessage(), 500); // Return a 500 status code for server errors
+        }
     }
 
     /**

@@ -96,4 +96,24 @@ class IncidentController extends Controller
         return redirect()->route('incidents.index')
             ->with('error', 'Data insiden tidak ditemukan.');
     }
+
+    public function submitSesuatu(Request $request, $id)
+    {
+        dd($request->all());
+        $request->validate([
+            'date' => 'required|date',
+            'time' => 'required|date_format:H:i',
+            'location' => 'nullable|string|max:255',
+            'description' => 'nullable|string',
+            'severity' => 'required|in:Critical,Hampir Terjadi,Sedang,Rendah',
+            'incident_type' => 'required|in:Gangguan,Psikolis,Penyakit,Cedera',
+            'injury_consequence' => 'required|in:Tanpa Perawatan,Pertolongan Pertama,Perawatan Medis,Waktu Hilang',
+            'employee_id' => 'required|exists:employees,id',
+            'days_of_absence' => 'nullable|integer',
+        ]);
+
+        Incident::create($request->all());
+
+        return redirect()->route('incidents.index')->with('success', 'Incident created successfully.');
+    }
 }

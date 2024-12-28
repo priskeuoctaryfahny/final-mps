@@ -126,12 +126,105 @@
                                 toastSuccess(response.message);
                             },
                             error: function(response) {
-                                console.log(response);
+                                toastError(response.message);
                             }
                         });
                     }
                 })
             }
+
+            const editableColumns = [1, 2, 3];
+            let currentEditableRow = null;
+
+            $('table').on('click', '#btn-edit', function(e) {
+                const userId = $(this).data('id');
+                const currentRow = $(this).closest('tr');
+
+                if (currentEditableRow && currentEditableRow !== currentRow) {
+                    resetEditableRow(currentEditableRow);
+                }
+                makeEditableRow(currentRow);
+                currentEditableRow = currentRow;
+
+                currentRow.find('td:last').html(
+                    '<button class="btn btn-sm btn-primary btn-save" data-id="' + userId +
+                    '"><i class="fas fa-check"></i></button>'
+                )
+
+            });
+
+
+
+            function makeEditableRow(currentRow) {
+                currentRow.find('td').each(function(index) {
+                    const currentCell = $(this);
+                    const currentText = currentCell.text().trim();
+                    if (editableColumns.includes(index)) {
+                        currentCell.html('<input type="text" class="form-control editable-input"  value="' +
+                            currentText + '" />');
+                    }
+                })
+            }
+
+            function resetEditableRow(currentEditableRow) {
+                currentEditableRow.find('td').each(function(index) {
+                    const currentCell = $(this);
+                    if (editableColumns.includes(index)) {
+                        const currentValue = currentCell.find('input').val();
+                        currentCell.html(`${currentValue}`);
+                    }
+                })
+
+                const userId = currentEditableRow.find('.btn-save').data('id');
+                currentEditableRow.find('td:last').html(`
+                <div class="btn-group mx-1">
+                        <button id="btn-edit" type="button"  class="btn btn-sm btn-warning btn-save" data-id="' . ${userId} . '">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button type="button" class="btn btn-sm btn-danger" onclick="deleteData(this)" data-id="' . ${userId} . '">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </div>
+                `);
+            }
+
+            $('table').on('click', '.btn-save', function(e) {
+                const userId = $(this).data('id');
+                const currentRow = $(this).closest('tr');
+                const updatedUserData = {};
+                currentRow.find('td').each(function(index) {
+                    if (editableColumns.includes(index)) {
+                        const inputValue = $(this).find('input').val();
+
+                        if (index === 1)
+                            updatedUserData.name = inputValue;
+                        if (index === 2)
+                            updatedUserData.email = inputValue;
+                        if (index === 3)
+                            updatedUserData.gender = inputValue;
+                    }
+                })
+
+                $.ajax({
+                    url: '{{ route('users.liveupdate') }}',
+                    type: 'PUT',
+                    data: {
+                        id: userId,
+                        name: updatedUserData.name,
+                        email: updatedUserData.email,
+                        gender: updatedUserData.gender,
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        reloadTable();
+                        toastSuccess(response.message);
+                    },
+                    error: function(response) {
+                        console.log(response);
+                        toastErrorOri(response.responseText);
+                    }
+                })
+            })
         </script>
         {{ $chart->script() }}
     @endpush
